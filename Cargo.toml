@@ -4,8 +4,8 @@ version = "0.2.0"
 edition = "2021"
 license = "AGPL-3.0-only"
 description = "Self-hosted music sync daemon, social graph, and web dashboard for Wanda and Wander"
-repository = "https://github.com/AgroUPlus/Agro"
-homepage = "https://agrouplus.github.io/Agro"
+repository = "https://github.com/oikos-suite/Agro"
+homepage = "https://oikos-suite.github.io/Agro"
 readme = "README.md"
 
 [dependencies]
