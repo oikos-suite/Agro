@@ -20,11 +20,7 @@ impl Db {
 
         let mut dump = |label: &str, sql: &str| -> Result<()> {
             let mut stmt = conn.prepare(sql)?;
-            let columns: Vec<String> = stmt
-                .column_names()
-                .into_iter()
-                .map(str::to_string)
-                .collect();
+            let columns: Vec<String> = stmt.column_names().map(str::to_string).collect();
             let rows = stmt
                 .query_map(params![username.trim()], |row| {
                     let mut object = serde_json::Map::new();
