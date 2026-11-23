@@ -1913,10 +1913,12 @@ type Query {
 	"""
 	Computes a private Year / Month in Review recap for the account.
 	
-	`utc_offset_minutes` is the listener's offset from UTC. It defaults to zero, which is what
-	this query did before the argument existed, so an older client keeps the answer it used to
-	get. A recap that omits it buckets by UTC hours and days — see [`crate::stats_wrapped`] for
-	why that is wrong for everyone who does not live on the meridian.
+	`utc_offset_minutes` is the listener's offset from UTC **in minutes** east of it: 60 for
+	UTC+1, -300 for UTC-5. Anything beyond ±1080 is refused, since it is almost always an
+	offset in seconds or milliseconds. It defaults to zero, which is what this query did before
+	the argument existed, so an older client keeps the answer it used to get. A recap that omits
+	it buckets by UTC hours and days — see [`crate::stats_wrapped`] for why that is wrong for
+	everyone who does not live on the meridian.
 	"""
 	agroWrapped(userId: String!, year: Int!, month: Int, utcOffsetMinutes: Int): AgroWrappedPayload!
 	"""
@@ -2076,8 +2078,9 @@ type Query {
 	people to open a second switch for it would mean an empty recap for everyone who had
 	already said yes to the first.
 	
-	`year` overrides `period` with a **calendar** year read in `utc_offset_minutes`, which is
-	what Agro Replay asks for. `period: "YEAR"` cannot serve that: it means the last 365 days,
+	`year` overrides `period` with a **calendar** year read in `utc_offset_minutes` (minutes
+	east of UTC, as for `agroWrapped`: 60 for UTC+1), which is what Agro Replay asks for.
+	`period: "YEAR"` cannot serve that: it means the last 365 days,
 	so a recap of 2026 opened in February would be half about 2027.
 	"""
 	circleRecap(period: String, year: Int, utcOffsetMinutes: Int): CircleRecapPayload!
@@ -2185,6 +2188,8 @@ type Query {
 	
 	Answers `suppressed` on a server with fewer than [`crate::db_replay::MIN_COHORT`] listeners
 	that year, where a ranking would describe identifiable people rather than a crowd.
+	
+	`utc_offset_minutes` is in minutes east of UTC, as for `agroWrapped`: 60 for UTC+1.
 	"""
 	replayChartStanding(year: Int!, utcOffsetMinutes: Int): ReplayChartStanding!
 }

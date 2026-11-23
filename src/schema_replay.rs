@@ -36,6 +36,8 @@ impl ReplayQuery {
     ///
     /// Answers `suppressed` on a server with fewer than [`crate::db_replay::MIN_COHORT`] listeners
     /// that year, where a ranking would describe identifiable people rather than a crowd.
+    ///
+    /// `utc_offset_minutes` is in minutes east of UTC, as for `agroWrapped`: 60 for UTC+1.
     async fn replay_chart_standing(
         &self,
         ctx: &Context<'_>,
@@ -45,9 +47,10 @@ impl ReplayQuery {
         let authed = caller(ctx)?;
         let db = ctx.data::<Db>()?;
 
-        let (since, until) =
-            crate::stats_wrapped::year_bounds(year, utc_offset_minutes.unwrap_or(0))
-                .ok_or_else(|| async_graphql::Error::new("That is not a year Agro can read"))?;
+        let zone = crate::stats_wrapped::listener_zone(utc_offset_minutes.unwrap_or(0))
+            .map_err(async_graphql::Error::new)?;
+        let (since, until) = crate::stats_wrapped::year_bounds(year, zone)
+            .ok_or_else(|| async_graphql::Error::new("That is not a year Agro can read"))?;
 
         let standing = db.standing_in(authed.username(), &since, &until)?;
         Ok(ReplayChartStanding {

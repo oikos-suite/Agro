@@ -134,10 +134,12 @@ impl StatsQuery {
 
     /// Computes a private Year / Month in Review recap for the account.
     ///
-    /// `utc_offset_minutes` is the listener's offset from UTC. It defaults to zero, which is what
-    /// this query did before the argument existed, so an older client keeps the answer it used to
-    /// get. A recap that omits it buckets by UTC hours and days — see [`crate::stats_wrapped`] for
-    /// why that is wrong for everyone who does not live on the meridian.
+    /// `utc_offset_minutes` is the listener's offset from UTC **in minutes** east of it: 60 for
+    /// UTC+1, -300 for UTC-5. Anything beyond ±1080 is refused, since it is almost always an
+    /// offset in seconds or milliseconds. It defaults to zero, which is what this query did before
+    /// the argument existed, so an older client keeps the answer it used to get. A recap that omits
+    /// it buckets by UTC hours and days — see [`crate::stats_wrapped`] for why that is wrong for
+    /// everyone who does not live on the meridian.
     async fn agro_wrapped(
         &self,
         ctx: &Context<'_>,
@@ -154,14 +156,10 @@ impl StatsQuery {
         )?;
         let db = ctx.data::<Db>()?;
         crate::features::Feature::Wrapped.require(db)?;
+        let zone = crate::stats_wrapped::listener_zone(utc_offset_minutes.unwrap_or(0))
+            .map_err(async_graphql::Error::new)?;
         let rows = db.scrobble_rows(&subject.username, None, None)?;
-        let wrapped = crate::stats_wrapped::compute_wrapped(
-            &rows,
-            year,
-            month,
-            10,
-            utc_offset_minutes.unwrap_or(0),
-        );
+        let wrapped = crate::stats_wrapped::compute_wrapped(&rows, year, month, 10, zone);
         Ok(AgroWrappedPayload {
             year: wrapped.year,
             month: wrapped.month,

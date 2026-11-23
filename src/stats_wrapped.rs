@@ -57,22 +57,39 @@ pub struct AgroWrapped {
     pub last_play: Option<String>,
 }
 
-/// Computes an "Agro Replay" recap for a calendar year, or one month of it.
+/// The furthest a clock is from UTC is fourteen hours ahead and twelve behind; ISO 8601 allows
+/// eighteen either way. An offset beyond that is not a time zone at all, and in practice it is
+/// the right offset in the wrong unit: seconds (3600 for UTC+1) or milliseconds.
+pub const MAX_OFFSET_MINUTES: i32 = 18 * 60;
+
+/// The listener's clock, from the `utcOffsetMinutes` a client sends: minutes east of UTC.
 ///
-/// [`offset_minutes`] is the listener's offset from UTC; see the module comment for why the whole
-/// computation happens in it rather than in UTC.
+/// Refused rather than guessed at when out of range. Every Replay resolver reads it through here,
+/// so they agree: `agroWrapped` used to treat a bad offset as UTC, and quietly bucketed the
+/// recap's hours and days on the wrong clock, while the standing and circle cards refused the very
+/// same number. The message names the unit, because that is almost always the mistake.
+pub fn listener_zone(offset_minutes: i32) -> Result<FixedOffset, String> {
+    let in_range = (-MAX_OFFSET_MINUTES..=MAX_OFFSET_MINUTES).contains(&offset_minutes);
+    in_range
+        .then(|| FixedOffset::east_opt(offset_minutes * 60))
+        .flatten()
+        .ok_or_else(|| {
+            format!(
+                "utcOffsetMinutes is minutes east of UTC, between -{MAX_OFFSET_MINUTES} and \
+                 {MAX_OFFSET_MINUTES}; got {offset_minutes}. UTC+1 is 60 (3600 would be seconds)."
+            )
+        })
+}
+
+/// Computes an "Agro Replay" recap for a calendar year, or one month of it, on the listener's
+/// clock (see [`listener_zone`], and the module comment for why not UTC).
 pub fn compute_wrapped(
     all_rows: &[ScrobbleRow],
     year: i32,
     month: Option<i32>,
     top_n: usize,
-    offset_minutes: i32,
+    zone: FixedOffset,
 ) -> AgroWrapped {
-    // A malformed offset is treated as UTC rather than refused: the recap is still worth showing,
-    // and the alternative is a card that fails because a client sent a nonsense number.
-    let zone = FixedOffset::east_opt(offset_minutes * 60)
-        .unwrap_or_else(|| FixedOffset::east_opt(0).expect("UTC is a valid fixed offset"));
-
     let mut prior_artists = HashSet::new();
     let mut period_rows = Vec::new();
 
@@ -218,11 +235,11 @@ fn longest_streak(active_days: &HashSet<(i32, u32)>) -> i64 {
     best
 }
 
-/// Half-open RFC3339 bounds of a calendar year in a fixed offset, `[start, end)`.
+/// Half-open RFC3339 bounds of a calendar year in a fixed offset, `[start, end)`, or `None` for a
+/// year outside what dates can represent.
 ///
 /// Half-open so this year and the next partition the history rather than sharing midnight.
-pub fn year_bounds(year: i32, offset_minutes: i32) -> Option<(String, String)> {
-    let zone = FixedOffset::east_opt(offset_minutes * 60)?;
+pub fn year_bounds(year: i32, zone: FixedOffset) -> Option<(String, String)> {
     let start = chrono::NaiveDate::from_ymd_opt(year, 1, 1)?
         .and_hms_opt(0, 0, 0)?
         .and_local_timezone(zone)
