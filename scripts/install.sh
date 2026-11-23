@@ -1,13 +1,13 @@
 #!/bin/sh
 # Installs the latest Agro release binary for this machine. No root needed.
 #
-#   curl -fsSL https://raw.githubusercontent.com/AgroUPlus/Agro/main/scripts/install.sh | sh
+#   curl -fsSL https://raw.githubusercontent.com/oikos-suite/Agro/main/scripts/install.sh | sh
 #
 # AGRO_INSTALL_DIR  where the binary goes (default ~/.local/bin)
 # AGRO_VERSION      a tag such as v0.2.0 (default: the latest release)
 set -eu
 
-repo="AgroUPlus/Agro"
+repo="oikos-suite/Agro"
 dir="${AGRO_INSTALL_DIR:-$HOME/.local/bin}"
 
 [ "$(uname -s)" = "Linux" ] || { echo "Prebuilt binaries are Linux only. Build from source: https://github.com/$repo#build" >&2; exit 1; }

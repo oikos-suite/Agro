@@ -9,18 +9,18 @@
 </p>
 
 <p align="center">
-  <a href="https://github.com/AgroUPlus/Agro/actions/workflows/ci.yml"><img src="https://github.com/AgroUPlus/Agro/actions/workflows/ci.yml/badge.svg" alt="CI Status"/></a>
-  <a href="https://github.com/AgroUPlus/Agro/releases"><img src="https://img.shields.io/github/v/release/AgroUPlus/Agro?include_prereleases&label=release" alt="Latest Release"/></a>
+  <a href="https://github.com/oikos-suite/Agro/actions/workflows/ci.yml"><img src="https://github.com/oikos-suite/Agro/actions/workflows/ci.yml/badge.svg" alt="CI Status"/></a>
+  <a href="https://github.com/oikos-suite/Agro/releases"><img src="https://img.shields.io/github/v/release/oikos-suite/Agro?include_prereleases&label=release" alt="Latest Release"/></a>
   <a href="LICENSE"><img src="https://img.shields.io/badge/license-AGPL--3.0-blue" alt="License"/></a>
   <img src="https://img.shields.io/badge/made%20in-%F0%9F%87%AB%F0%9F%87%B7%20France-002395" alt="Made in France"/>
   <a href="https://sonarcloud.io/summary/new_code?id=AgroUPlus_Agro"><img src="https://sonarcloud.io/api/project_badges/measure?project=AgroUPlus_Agro&metric=alert_status" alt="Quality Gate"/></a>
-  <a href="https://agrouplus.github.io/Agro"><img src="https://img.shields.io/badge/docs-OpenAPI%20%2F%20GraphQL-brightgreen" alt="Documentation"/></a>
+  <a href="https://oikos-suite.github.io/Agro"><img src="https://img.shields.io/badge/docs-OpenAPI%20%2F%20GraphQL-brightgreen" alt="Documentation"/></a>
 </p>
 
 <p align="center">
-  <a href="https://agrouplus.github.io/Agro">Website</a> ·
-  <a href="https://github.com/AgroUPlus/Wanda">Wanda Android</a> ·
-  <a href="https://github.com/AgroUPlus/Wander">Wander Desktop</a> ·
+  <a href="https://oikos-suite.github.io/Agro">Website</a> ·
+  <a href="https://github.com/oikos-suite/Wanda">Wanda Android</a> ·
+  <a href="https://github.com/oikos-suite/Wander">Wander Desktop</a> ·
   <a href="SECURITY.md">Security</a> ·
   <a href="CLIENTS.md">Write a client</a> ·
   <a href="CONTRIBUTING.md">Contributing</a> ·
@@ -33,7 +33,7 @@ Agro keeps **playback handoff**, **library sync**, **friends**, **jam rooms** an
 
 Designed for people who run their own infrastructure: one binary, one SQLite file, no external services, zero telemetry. Every social surface is off until you switch it on, and presence and handoff metadata are sealed end to end, so the server routes what it cannot read.
 
-Agro is the optional server behind [Wanda](https://github.com/AgroUPlus/Wanda) (Android) and [Wander](https://github.com/AgroUPlus/Wander) (Linux terminal). Both players work fully on their own; Agro adds everything that needs more than one device.
+Agro is the optional server behind [Wanda](https://github.com/oikos-suite/Wanda) (Android) and [Wander](https://github.com/oikos-suite/Wander) (Linux terminal). Both players work fully on their own; Agro adds everything that needs more than one device.
 
 <p align="center">
   <img src="docs/assets/mockups/promo-agro-devices.jpg" width="49%" alt="Wander on a desktop beside two Wanda phones: playback hands off between them and stats cover every device" />
@@ -102,8 +102,8 @@ Only if you want it to. Without <code>AGRO_LIBRARY_ROOT</code>, Agro runs <b>ind
 | | What it is | Needs Agro? |
 |---|---|---|
 | **Agro** (this repo) | The server: handoff, jam rooms, friends, shared playlists, share links, stats across devices. Self-host it, or use Agro Cloud. | — |
-| **[Wanda](https://github.com/AgroUPlus/Wanda)** | The Android player: Navidrome/Subsonic, local files, YouTube Music and Deezer in one library. | No. Agro adds the shared features. |
-| **[Wander](https://github.com/AgroUPlus/Wander)** | The terminal player for Linux: Navidrome/Subsonic and local files. | No. Agro adds the shared features. |
+| **[Wanda](https://github.com/oikos-suite/Wanda)** | The Android player: Navidrome/Subsonic, local files, YouTube Music and Deezer in one library. | No. Agro adds the shared features. |
+| **[Wander](https://github.com/oikos-suite/Wander)** | The terminal player for Linux: Navidrome/Subsonic and local files. | No. Agro adds the shared features. |
 
 ---
 
@@ -146,7 +146,7 @@ Want to build your own client? Start with [CLIENTS.md](CLIENTS.md).
 ```bash
 docker run -d --name agro -p 8700:8700 \
   -v agro_data:/opt/agro/data -v ~/Music:/srv/music:ro \
-  ghcr.io/agrouplus/agro
+  ghcr.io/oikos-suite/agro
 docker logs agro   # the one-time setup token is printed here
 ```
 
@@ -155,7 +155,7 @@ Or use [`docker-compose.yml`](docker-compose.yml).
 **Native binary** (Linux, amd64 and arm64, no root):
 
 ```bash
-curl -fsSL https://raw.githubusercontent.com/AgroUPlus/Agro/main/scripts/install.sh | sh
+curl -fsSL https://raw.githubusercontent.com/oikos-suite/Agro/main/scripts/install.sh | sh
 ```
 
 Then open `http://localhost:8700` and follow the [Quickstart](#quickstart). To compile it yourself, see [Building from Source](#building-from-source).
