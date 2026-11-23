@@ -88,39 +88,6 @@ export default function App() {
     setLocked(true);
   };
 
-  const handleRenameNode = async (node) => {
-    const typed = window.prompt('What should this device be called?', node.petname);
-    if (typed === null) return;
-    const petname = typed.trim();
-    if (!petname) return;
-    try {
-      const res = await gql(
-        `mutation RenameNode($u: String!, $d: String!, $p: String!) {
-           renameNode(userId: $u, deviceId: $d, petname: $p)
-         }`,
-        { u: username, d: node.deviceId, p: petname }
-      );
-      const body = await res.json();
-      if (body?.errors?.length) throw new Error(body.errors[0].message);
-      setNodes((prev) => prev.map((n) => (n.deviceId === node.deviceId ? { ...n, petname } : n)));
-    } catch (e) {
-      if (e.unauthorized) setLocked(true);
-    }
-  };
-
-  const handleDeleteNode = async (deviceId) => {
-    try {
-      await gql(`
-        mutation UnregisterNode {
-          unregisterNode(userId: "${username}", deviceId: "${deviceId}")
-        }
-      `);
-      setNodes((prev) => prev.filter((n) => n.deviceId !== deviceId));
-    } catch (e) {
-      if (e.unauthorized) setLocked(true);
-    }
-  };
-
   const poll = useCallback(async () => {
     if (!getToken()) return;
     try {
@@ -240,13 +207,7 @@ export default function App() {
           )}
 
           {activeTab === 'devices' && (
-            <DevicesTab
-              username={username}
-              nodes={nodes}
-              onRenameNode={handleRenameNode}
-              onDeleteNode={handleDeleteNode}
-              onUnauthorized={lockOut}
-            />
+            <DevicesTab username={username} nodes={nodes} onChanged={poll} onUnauthorized={lockOut} />
           )}
 
           {activeTab === 'stats' && (

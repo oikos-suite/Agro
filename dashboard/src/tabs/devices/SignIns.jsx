@@ -10,10 +10,9 @@ function when(iso) {
 }
 
 /** Every credential issued to the account, one per line, each revocable on its own. */
-export default function SignIns({ appPasswords, busy, notice, onRevoke }) {
+export default function SignIns({ appPasswords, busy, onRevoke }) {
   return (
     <div className="card">
-      {notice && <div className="inline-notice">{notice}</div>}
       {appPasswords.length === 0 ? (
         <div className="empty-hint">No sign-ins.</div>
       ) : (

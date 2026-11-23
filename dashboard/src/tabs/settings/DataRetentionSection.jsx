@@ -1,5 +1,8 @@
-import React from 'react';
 import { Trash2 } from 'lucide-react';
+
+/** This year and the four before it, so the list never goes stale on New Year's Day. */
+const THIS_YEAR = new Date().getFullYear();
+const YEARS = Array.from({ length: 5 }, (_, i) => THIS_YEAR - i);
 
 export default function DataRetentionSection({
   purgeYear,
@@ -16,23 +19,21 @@ export default function DataRetentionSection({
         </div>
       </div>
 
-      {purgeNotice && <div className="empty-hint" style={{ padding: '10px 14px' }}>{purgeNotice}</div>}
+      {purgeNotice && <div className="empty-hint retention-notice">{purgeNotice}</div>}
 
-      <div style={{ display: 'flex', gap: '12px', alignItems: 'center', marginTop: '6px' }}>
+      <div className="retention-row">
         <select
-          className="form-input"
-          style={{ width: '180px' }}
+          className="form-input retention-year"
           value={purgeYear}
           onChange={(e) => onPurgeYearChange(e.target.value)}
+          aria-label="Which history to delete"
         >
           <option value="">All-Time History</option>
-          <option value="2026">Year 2026</option>
-          <option value="2025">Year 2025</option>
-          <option value="2024">Year 2024</option>
+          {YEARS.map((year) => <option key={year} value={year}>Year {year}</option>)}
         </select>
 
         <button className="btn btn-secondary" onClick={onPurgeScrobbles}>
-          <Trash2 size={13} color="var(--status-danger)" />
+          <Trash2 size={13} color="var(--status-error)" />
           <span>Delete history</span>
         </button>
       </div>

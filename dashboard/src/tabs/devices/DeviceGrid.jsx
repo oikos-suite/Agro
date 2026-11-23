@@ -37,7 +37,7 @@ export default function DeviceGrid({ nodes, username, onRename, onDelete, onPair
                 </Cookie>
                 <div className="device-tile-actions">
                   <button className="icon-btn" onClick={() => onRename(node)} aria-label="Rename"><Pencil size={15} /></button>
-                  <button className="icon-btn danger" onClick={() => onDelete(node.deviceId)} aria-label="Remove"><Trash2 size={15} /></button>
+                  <button className="icon-btn danger" onClick={() => onDelete(node)} aria-label="Remove"><Trash2 size={15} /></button>
                 </div>
               </div>
               <div className="device-name">{node.petname}</div>
