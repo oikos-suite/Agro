@@ -1,6 +1,6 @@
 services:
   agro:
-    image: ghcr.io/agrouplus/agro:latest
+    image: ghcr.io/oikos-suite/agro:latest
     container_name: agro
     restart: unless-stopped
     ports:

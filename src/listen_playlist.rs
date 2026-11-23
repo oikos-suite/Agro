@@ -20,7 +20,7 @@ use axum::{
 };
 
 /// Where someone without Wanda can get it. A fixed address, never one taken from the link.
-const INSTALL_URL: &str = "https://github.com/AgroUPlus/Wanda/releases/latest";
+const INSTALL_URL: &str = "https://github.com/oikos-suite/Wanda/releases/latest";
 
 /// Playlist ids are UUIDs, and nothing else reaches the app: the value is placed in a `wanda://`
 /// URL and an `intent://` URL, and the app sends it back to a server.

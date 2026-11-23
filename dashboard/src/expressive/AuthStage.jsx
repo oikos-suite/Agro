@@ -67,11 +67,11 @@ export default function AuthStage({ children }) {
       </section>
 
       <footer className="auth-stage-footer">
-        <a className="auth-footer-link" href="https://github.com/AgroUPlus/Agro" target="_blank" rel="noreferrer">
+        <a className="auth-footer-link" href="https://github.com/oikos-suite/Agro" target="_blank" rel="noreferrer">
           <GitHubMark />
           GitHub
         </a>
-        <a className="auth-footer-link" href="https://agrouplus.github.io/Agro" target="_blank" rel="noreferrer">
+        <a className="auth-footer-link" href="https://oikos-suite.github.io/Agro" target="_blank" rel="noreferrer">
           <Globe size={15} />
           Website
         </a>
