@@ -96,7 +96,7 @@ export default function AccountSettingsTab({ username, onUnauthorized }) {
     }
   }, [username, onUnauthorized]);
 
-  useEffect(() => { load(); }, [load]);
+  useEffect(() => { void load(); }, [load]);
 
   const handleSaveProfile = async (e) => {
     e.preventDefault();

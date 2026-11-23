@@ -90,7 +90,7 @@ export default function StatsTab({ username, nodes = [], onUnauthorized }) {
 
   useEffect(() => {
     if (scope !== 'me') return undefined;
-    load();
+    void load();
     // Statistics move slowly. A minute is frequent enough to feel live and rare enough not to
     // re-aggregate somebody's whole history every few seconds.
     const timer = setInterval(load, 60000);

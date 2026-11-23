@@ -142,7 +142,7 @@ export default function App() {
   }, []);
 
   useEffect(() => {
-    poll();
+    void poll();
     const interval = setInterval(poll, 4000);
     return () => clearInterval(interval);
   }, [poll]);

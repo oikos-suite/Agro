@@ -5,6 +5,7 @@ import { gql, setToken } from './api.js';
 import Field from './components/form/Field.jsx';
 import TextInput from './components/form/TextInput.jsx';
 import AgroLogo from './components/AgroLogo.jsx';
+import { copyText } from './clipboard.js';
 
 const BEGIN = `mutation { beginTotp { otpauthUri secretBase32 } }`;
 const CONFIRM = `mutation Confirm($code: String!) {
@@ -33,7 +34,8 @@ export default function EnrolTotpScreen({ onEnrolled }) {
   const [busy, setBusy] = useState(false);
 
   useEffect(() => {
-    (async () => {
+    // Every failure inside is caught and shown, so nothing is left to await.
+    void (async () => {
       try {
         const res = await gql(BEGIN);
         const body = await res.json();
@@ -84,8 +86,10 @@ export default function EnrolTotpScreen({ onEnrolled }) {
         <button
           type="button"
           className="auth-submit"
-          onClick={() => {
-            navigator.clipboard?.writeText(recoveryCodes.join('\n'));
+          onClick={async () => {
+            // Continues either way: a copy the browser refused is shown in a prompt to copy by
+            // hand first, and the codes stay on this screen until then.
+            await copyText(recoveryCodes.join('\n'), 'Copy your recovery codes');
             onEnrolled();
           }}
         >

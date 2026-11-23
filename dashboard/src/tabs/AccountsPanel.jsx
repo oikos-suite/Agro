@@ -48,7 +48,7 @@ export default function AccountsPanel({ me, onUnauthorized }) {
     }
   }, [onUnauthorized]);
 
-  useEffect(() => { load(); }, [load]);
+  useEffect(() => { void load(); }, [load]);
 
   async function run(key, query, variables, message) {
     setBusy(key);
@@ -81,7 +81,7 @@ export default function AccountsPanel({ me, onUnauthorized }) {
       setNotice('That is not a number of megabytes.');
       return;
     }
-    run(account.username, SET_QUOTA, { user: account.username, bytes: Math.round(mb * MB) },
+    void run(account.username, SET_QUOTA, { user: account.username, bytes: Math.round(mb * MB) },
       `${account.username} now has ${mb === 0 ? 'no' : `a ${mb} MB`} quota.`);
   }
 
@@ -95,7 +95,7 @@ export default function AccountsPanel({ me, onUnauthorized }) {
       `Type ${account.username} to confirm.`
     );
     if (typed !== account.username) return;
-    run(account.username, DELETE_ACCOUNT, { user: account.username },
+    void run(account.username, DELETE_ACCOUNT, { user: account.username },
       `${account.username} deleted.`);
   }
 

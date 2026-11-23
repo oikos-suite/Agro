@@ -49,7 +49,7 @@ export default function BackupsTab({ onUnauthorized }) {
   }, [onUnauthorized]);
 
   useEffect(() => {
-    load();
+    void load();
     // A backup lands at most a few times a day; a minute is plenty to see one arrive.
     const timer = setInterval(load, 60000);
     return () => clearInterval(timer);

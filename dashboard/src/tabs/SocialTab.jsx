@@ -57,7 +57,7 @@ export default function SocialTab({ onUnauthorized }) {
   }, [days, period, onUnauthorized]);
 
   useEffect(() => {
-    loadData();
+    void loadData();
     const interval = setInterval(loadData, 20000);
     return () => clearInterval(interval);
   }, [loadData]);

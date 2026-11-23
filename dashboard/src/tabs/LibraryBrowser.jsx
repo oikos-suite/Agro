@@ -78,7 +78,7 @@ export default function LibraryBrowser({ username, devices, onUnauthorized }) {
     if (!confirm('Are you sure you want to completely remove this from the server index?')) return;
     try {
       await gql(DELETE_ITEM_MUTATION, { user: username, kind, id });
-      load();
+      void load();
     } catch (error) {
       if (error.unauthorized) onUnauthorized?.();
     }
@@ -179,7 +179,7 @@ export default function LibraryBrowser({ username, devices, onUnauthorized }) {
                   <button 
                     className="cover-delete-btn" 
                     title="Remove from Server"
-                    onClick={(e) => { e.stopPropagation(); deleteItem(item.id); }}
+                    onClick={(e) => { e.stopPropagation(); void deleteItem(item.id); }}
                   >
                     <Trash2 size={14} />
                   </button>

@@ -2,6 +2,7 @@ import { useState } from 'react';
 import { QRCodeSVG } from 'qrcode.react';
 import { Check, Copy, Music2, Pencil, Plus, Smartphone, Terminal, Trash2, X } from 'lucide-react';
 import Cookie from '../../expressive/Cookie.jsx';
+import { copyText } from '../../clipboard.js';
 
 /**
  * Every player on the account as a tile — a phone on a cookie, a desktop on a clover — and, as the
@@ -54,7 +55,7 @@ export default function DeviceGrid({ nodes, username, onRename, onDelete, onPair
 
         <div className={`device-tile device-pair ${naming ? 'is-open' : ''}`}>
           {naming ? (
-            <form className="device-pair-form" onSubmit={e => { e.preventDefault(); pair(); }}>
+            <form className="device-pair-form" onSubmit={e => { e.preventDefault(); void pair(); }}>
               <span className="device-name">Name it</span>
               <input autoFocus placeholder="Living room laptop" value={name} onChange={e => setName(e.target.value)} />
               <div className="device-pair-buttons">
@@ -82,8 +83,8 @@ function PairingCard({ pairing, username, onClose }) {
   const server = window.location.origin;
   const qr = `agro://connect?username=${encodeURIComponent(username)}&token=${encodeURIComponent(pairing.token)}&server=${encodeURIComponent(server)}`;
 
-  function copy() {
-    navigator.clipboard.writeText(pairing.token);
+  async function copy() {
+    if (!(await copyText(pairing.token, 'Copy this token'))) return;
     setCopied(true);
     setTimeout(() => setCopied(false), 2000);
   }

@@ -48,7 +48,7 @@ export default function usePlaylistSync(id, onUnauthorized) {
   }, [id, adopt, onUnauthorized]);
 
   useEffect(() => {
-    load();
+    void load();
   }, [load]);
 
   useEffect(() => {

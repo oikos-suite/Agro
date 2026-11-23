@@ -5,6 +5,7 @@ import Field from './components/form/Field.jsx';
 import TextInput from './components/form/TextInput.jsx';
 import AgroLogo from './components/AgroLogo.jsx';
 import { unlockPresence } from './vault.js';
+import { copyText } from './clipboard.js';
 
 /**
  * The whole of the signed-out experience: signing in, and creating an account.
@@ -44,7 +45,8 @@ export default function AuthScreen({ onSignedIn, ssoError, onDismissSsoError }) 
   const touch = (name) => setTouched((prev) => ({ ...prev, [name]: true }));
 
   useEffect(() => {
-    ssoConfig().then(setSso);
+    // ssoConfig answers "disabled" rather than rejecting.
+    void ssoConfig().then(setSso);
   }, []);
 
   async function handleSignIn(event) {
@@ -101,8 +103,8 @@ export default function AuthScreen({ onSignedIn, ssoError, onDismissSsoError }) 
     }
   }
 
-  function copyPassphrase() {
-    navigator.clipboard?.writeText(created.passphrase);
+  async function copyPassphrase() {
+    if (!(await copyText(created.passphrase, 'Copy your passphrase'))) return;
     setCopied(true);
     setTimeout(() => setCopied(false), 1600);
   }
