@@ -7,6 +7,7 @@ import Field from './components/form/Field.jsx';
 import TextInput from './components/form/TextInput.jsx';
 import { AuthShell } from './AuthScreen.jsx';
 import './setup.css';
+import { copyText } from './clipboard.js';
 
 const STEPS = ['Create admin', 'Save passphrase', 'Sign in'];
 const USERNAME_RULE = /^[a-z0-9._-]{1,32}$/;
@@ -76,8 +77,8 @@ export default function SetupScreen({ initialToken, onSignedIn }) {
     }
   }
 
-  function copy() {
-    navigator.clipboard?.writeText(created.passphrase);
+  async function copy() {
+    if (!(await copyText(created.passphrase, 'Copy your passphrase'))) return;
     setCopied(true);
     setTimeout(() => setCopied(false), 1600);
   }

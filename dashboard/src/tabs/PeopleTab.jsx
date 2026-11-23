@@ -3,6 +3,7 @@ import { UserCheck, UserX, Ticket, Copy, Check, Ban, Trash2, Plus, Hourglass } f
 import { gql } from '../api.js';
 import AccountsPanel from './AccountsPanel.jsx';
 import Avatar from '../Avatar.jsx';
+import { copyText } from '../clipboard.js';
 
 /**
  * The approval queue and the invite codes — the two things an open instance cannot run without.
@@ -49,7 +50,7 @@ export default function PeopleTab({ me, onUnauthorized }) {
   }, [onUnauthorized]);
 
   useEffect(() => {
-    load();
+    void load();
     // Someone signing up is not an event anyone watches tick over.
     const timer = setInterval(load, 20000);
     return () => clearInterval(timer);
@@ -77,11 +78,11 @@ export default function PeopleTab({ me, onUnauthorized }) {
 
   async function mintInvite(maxUses, ttlHours) {
     const data = await run('new-invite', CREATE_INVITE, { maxUses, ttlHours });
-    if (data?.createInvite?.code) copy(data.createInvite.code);
+    if (data?.createInvite?.code) await copy(data.createInvite.code);
   }
 
-  function copy(code) {
-    navigator.clipboard?.writeText(code);
+  async function copy(code) {
+    if (!(await copyText(code, 'Copy this invite code'))) return;
     setCopied(code);
     setTimeout(() => setCopied(''), 2000);
   }
@@ -155,7 +156,7 @@ export default function PeopleTab({ me, onUnauthorized }) {
                     {invite.revoked ? ' · revoked' : invite.expiresAt ? ` · until ${new Date(invite.expiresAt).toLocaleDateString()}` : ''}
                   </span>
                   <span className="ticket-actions">
-                    <button className="icon-btn" onClick={() => copy(invite.code)} aria-label="Copy code">
+                    <button className="icon-btn" onClick={() => void copy(invite.code)} aria-label="Copy code">
                       {copied === invite.code ? <Check size={15} /> : <Copy size={15} />}
                     </button>
                     {!invite.revoked && (

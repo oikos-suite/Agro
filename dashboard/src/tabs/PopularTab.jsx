@@ -31,7 +31,7 @@ export default function PopularTab() {
   }, [days]);
 
   useEffect(() => {
-    load();
+    void load();
     const timer = setInterval(load, 60000);
     return () => clearInterval(timer);
   }, [load]);

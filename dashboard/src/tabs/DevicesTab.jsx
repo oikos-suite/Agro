@@ -48,14 +48,14 @@ export default function DevicesTab({ username, nodes = [], onChanged, onUnauthor
     }
   }, [username, onUnauthorized]);
 
-  useEffect(() => { load(); }, [load]);
+  useEffect(() => { void load(); }, [load]);
 
   async function pair(label) {
     try {
       const res = await gql(MINT_MUTATION, { user: username, label });
       const body = await res.json();
       if (body?.errors?.length) throw new Error(body.errors[0].message);
-      load();
+      void load();
       return body?.data?.createAppPassword ?? null;
     } catch (e) {
       if (e.unauthorized) onUnauthorized?.();

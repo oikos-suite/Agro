@@ -55,7 +55,7 @@ export default function AdminPluginsTab({ onUnauthorized }) {
   }, [onUnauthorized]);
 
   useEffect(() => {
-    load();
+    void load();
   }, [load]);
 
   // Not optimistic: the switch moves when the server has agreed, so it never shows a state the

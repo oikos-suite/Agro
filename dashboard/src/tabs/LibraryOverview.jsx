@@ -36,7 +36,7 @@ export default function LibraryOverview({ username, onOpenPlaylist, onOpenAlbum,
   }, [username, onUnauthorized]);
 
   useEffect(() => {
-    if (username) load();
+    if (username) void load();
   }, [username, load]);
 
   const newPlaylist = async () => {

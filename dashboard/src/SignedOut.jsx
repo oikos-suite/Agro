@@ -16,7 +16,7 @@ export default function SignedOut(props) {
 
   useEffect(() => {
     clearSetupFragment();
-    setupStatus().then(setNeedsSetup);
+    void setupStatus().then(setNeedsSetup);
   }, []);
 
   if (needsSetup === null) {

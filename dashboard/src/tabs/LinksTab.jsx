@@ -39,7 +39,7 @@ export default function LinksTab({ username, onUnauthorized }) {
   }, [username, onUnauthorized]);
 
   useEffect(() => {
-    load();
+    void load();
     // Slower than the 2.5s node poll: a click count is not something anyone watches tick over, and
     // this list can be long.
     const timer = setInterval(load, 15000);

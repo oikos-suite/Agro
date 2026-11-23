@@ -48,7 +48,7 @@ export default function YearInReview({ username, year, month, onUnauthorized }) 
     }
   }, [username, year, month, onUnauthorized]);
 
-  useEffect(() => { if (username) load(); }, [username, load]);
+  useEffect(() => { if (username) void load(); }, [username, load]);
 
   const span = month ? `${MONTHS[month - 1]} ${year}` : String(year);
   if (error) return <div className="empty-hint" role="alert">{error}</div>;

@@ -10,6 +10,7 @@ import SyncChip from '../components/library/SyncChip.jsx';
 import TrackTable from '../components/library/TrackTable.jsx';
 import AddTracksPanel from '../components/library/AddTracksPanel.jsx';
 import { DetailsForm, SharingSelects } from '../components/library/OwnerControls.jsx';
+import { copyText } from '../clipboard.js';
 import { VISIBILITY_LABEL, formatTotal, songCount } from '../components/library/format.js';
 
 const CAN_ADD = ['OWNER', 'EDITOR', 'CONTRIBUTOR'];
@@ -46,18 +47,12 @@ export default function PlaylistDetail({ id, me, onBack, onUnauthorized }) {
   const move = (from, to) => {
     const order = items.filter((_, index) => index !== from);
     const afterItemId = to === 0 ? null : order[to - 1].id;
-    sync.commit([{ move: { itemId: items[from].id, afterItemId } }]);
+    void sync.commit([{ move: { itemId: items[from].id, afterItemId } }]);
   };
 
   const copyLink = async () => {
     const url = `${window.location.origin}/listen?pl=${playlist.id}`;
-    // The clipboard API exists only on a secure origin; a dashboard reached over plain HTTP on the
-    // LAN gets the link to copy by hand instead.
-    if (!navigator.clipboard) {
-      window.prompt('Copy this link', url);
-      return;
-    }
-    await navigator.clipboard.writeText(url);
+    if (!(await copyText(url, 'Copy this link'))) return;
     setCopied(true);
     setTimeout(() => setCopied(false), 1500);
   };
