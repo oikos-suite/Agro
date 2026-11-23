@@ -9,13 +9,10 @@ import { splitTitle } from '../stats/format.js';
  * what it played, and how alike each pair of friends' taste is.
  */
 export default function CircleRecap({ recap, loaded }) {
-  if (!recap) {
-    return (
-      <div className="empty-state">
-        <Cookie shape="clover" size={88}><Users size={34} /></Cookie>
-        <span className="empty-state-title">{loaded ? 'Nothing to recap yet' : 'Loading…'}</span>
-      </div>
-    );
+  // A recap with nothing in it is one line, not three empty cards.
+  const empty = !recap || (!recap.anthem && !recap.topTracks.length && !recap.topArtists.length && !recap.matrix.length);
+  if (empty) {
+    return <div className="empty-hint">{loaded ? 'Nothing to recap yet.' : 'Loading…'}</div>;
   }
 
   return (

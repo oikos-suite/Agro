@@ -66,7 +66,6 @@
   background: var(--md-sys-color-surface-container);
 }
 
-.stats-top-song .m3-shape-bg { animation: shape-turn 30s linear infinite; }
 .stats-top-song-text { display: flex; flex-direction: column; min-width: 0; flex: 1; }
 .stats-top-title { font-size: 1.3rem; font-weight: 800; font-variation-settings: var(--round-title); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
 .stats-top-artist { color: var(--md-sys-color-on-surface-variant); font-weight: 500; }
@@ -120,7 +119,7 @@
 
 .stats-square-sunny { justify-content: center; align-items: center; padding: 0; text-align: center; color: var(--md-sys-color-on-tertiary); }
 .stats-sunny-shape { position: absolute; inset: 0; }
-.stats-sunny-shape .m3-shape-bg { fill: var(--md-sys-color-tertiary); animation: shape-turn 40s linear infinite reverse; }
+.stats-sunny-shape .m3-shape-bg { fill: var(--md-sys-color-tertiary); }
 .stats-sunny-text { position: relative; }
 
 /* ── Charts ──────────────────────────────────────────────────────────────────────────────── */
@@ -181,10 +180,6 @@
 .rank-name { font-weight: 700; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
 .rank-sub { font-size: 12.5px; color: var(--md-sys-color-on-surface-variant); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
 .rank-value { font-weight: 700; color: var(--md-sys-color-on-surface-variant); font-variant-numeric: tabular-nums; }
-
-@media (prefers-reduced-motion: reduce) {
-  .stats-top-song .m3-shape-bg, .stats-sunny-shape .m3-shape-bg { animation: none; }
-}
 
 @media (max-width: 1100px) {
   .stats-summary, .stats-charts { grid-template-columns: minmax(0, 1fr); }

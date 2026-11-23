@@ -55,8 +55,6 @@
 
 .m3-shape > :not(.m3-shape-bg) { position: relative; color: var(--md-sys-color-on-primary-container); }
 
-@keyframes shape-turn { to { rotate: 360deg; } }
-
 /* ── Tabs & pills ────────────────────────────────────────────────────────────────────────── */
 
 /* A tab's sub-pages (SubTabs.jsx), with that page's own controls pushed to the right. */
@@ -129,7 +127,6 @@
 .stat-tile:nth-child(3) { background-image: radial-gradient(120% 100% at 100% 0%, rgba(240, 224, 131, 0.1) 0%, transparent 55%); }
 .stat-tile:nth-child(4) { background-image: radial-gradient(120% 100% at 100% 0%, rgba(230, 95, 180, 0.12) 0%, transparent 55%); }
 
-.stat-tile:hover { transform: translateY(-4px); border-color: var(--md-sys-color-primary); }
 
 .stat-tile-head { font-weight: 700; letter-spacing: 0.06em; color: var(--md-sys-color-outline); }
 .stat-tile-head svg { color: var(--md-sys-color-primary); }
@@ -154,7 +151,6 @@
 }
 
 .chart-row { border-radius: 16px; background: var(--md-sys-color-surface-container); border: 2px solid transparent; transition: border-color 0.2s ease, transform 0.3s var(--m3-spring-fast); }
-.chart-row:hover { border-color: var(--md-sys-color-outline-variant); transform: translateX(4px); }
 .chart-row-fill { background: linear-gradient(90deg, rgba(208, 188, 255, 0.16), rgba(125, 220, 185, 0.1)); }
 .chart-rank { font-weight: 800; font-variant-numeric: tabular-nums; }
 
@@ -201,6 +197,3 @@
   border: 2px solid var(--md-sys-color-primary);
 }
 
-@media (prefers-reduced-motion: reduce) {
-  .stat-tile:hover, .chart-row:hover { transform: none; }
-}

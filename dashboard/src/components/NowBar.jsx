@@ -1,4 +1,4 @@
-import React, { useEffect, useRef } from 'react';
+import { useEffect, useRef } from 'react';
 import { Smartphone, Terminal, Radio } from 'lucide-react';
 import { formatDuration } from '../api.js';
 import NowBarUnlock from './NowBarUnlock.jsx';
@@ -75,28 +75,14 @@ export default function NowBar({ lastHandoff, nodes = [], onUnlocked }) {
 
   return (
     <footer className={`modern-now-bar ${isPlaying ? 'is-playing' : ''}`}>
-      {/* Left: Animated Pulse/Wave + Cover + Track details */}
       <div className="now-bar-media">
-        <div className={`audio-pulse-indicator ${isPlaying ? 'is-playing' : ''}`}>
-          <span className="wave-bar bar-1" />
-          <span className="wave-bar bar-2" />
-          <span className="wave-bar bar-3" />
-          <span className="wave-bar bar-4" />
-        </div>
-
-        {/* A record: the cover turns while it plays, with its own colour glowing beneath it. */}
-        <div className={`now-bar-disc ${isPlaying ? 'is-spinning' : ''}`}>
-          {artworkUrl ? (
-            <>
-              <img src={artworkUrl} alt="" className="now-bar-art-glow" aria-hidden="true" />
-              <img src={artworkUrl} alt={title} className="now-bar-art" />
-            </>
-          ) : (
-            <div className="now-bar-art-placeholder">
-              <Radio size={16} />
-            </div>
-          )}
-        </div>
+        {artworkUrl ? (
+          <img src={artworkUrl} alt={title} className="now-bar-art" />
+        ) : (
+          <div className="now-bar-art-placeholder">
+            <Radio size={16} />
+          </div>
+        )}
 
         <div className="now-bar-info">
           <div className="now-bar-track-title">{title}</div>

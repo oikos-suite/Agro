@@ -20,9 +20,6 @@ import './expressive/admin.css'
 import './expressive/library.css'
 import './expressive/auth.css'
 import './expressive/phone.css'
-import { startExpressiveCursor } from './expressive/cursor.js'
-
-startExpressiveCursor()
 
 createRoot(document.getElementById('root')).render(
   <StrictMode>

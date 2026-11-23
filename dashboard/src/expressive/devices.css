@@ -14,25 +14,19 @@
   transition: transform 0.35s var(--m3-spring-fast), border-color 0.25s ease;
 }
 
-.device-tile:hover { transform: translateY(-4px); border-color: var(--md-sys-color-primary); }
 .device-tile-top { display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 12px; }
 .device-tile-actions { display: flex; gap: 6px; opacity: 0; transition: opacity 0.2s ease; }
 .device-tile:hover .device-tile-actions, .device-tile:focus-within .device-tile-actions { opacity: 1; }
 
 .device-shape .m3-shape-bg { transition: rotate 0.8s var(--spring-soft), scale 0.6s var(--spring-soft); }
-.device-tile:hover .device-shape .m3-shape-bg { rotate: 60deg; scale: 1.08; }
 .device-tile:not(.is-online) .device-shape .m3-shape-bg { fill: var(--md-sys-color-surface-container-highest); }
 .device-tile:not(.is-online) .device-shape > :not(.m3-shape-bg) { color: var(--md-sys-color-on-surface-variant); }
 
 .device-name { font-size: 1.2rem; font-weight: 800; font-variation-settings: var(--round-title); }
 .device-kind { display: flex; align-items: center; gap: 7px; font-size: 13.5px; color: var(--md-sys-color-on-surface-variant); }
 .device-dot { width: 8px; height: 8px; border-radius: 50%; background: var(--md-sys-color-outline); }
-.is-online .device-dot { background: var(--md-sys-color-tertiary); animation: live-ping 1.8s ease-out infinite; }
+.is-online .device-dot { background: var(--md-sys-color-tertiary); }
 
-@keyframes live-ping {
-  from { box-shadow: 0 0 0 0 rgba(125, 220, 185, 0.6); }
-  to { box-shadow: 0 0 0 7px rgba(125, 220, 185, 0); }
-}
 
 .device-track {
   display: flex;
@@ -113,10 +107,6 @@
 .link-clicks { display: flex; flex-direction: column; align-items: flex-end; min-width: 56px; font-size: 12px; color: var(--md-sys-color-outline); }
 .link-clicks b { font-size: 1.35rem; font-weight: 800; font-variation-settings: var(--round-title); color: var(--md-sys-color-on-surface); line-height: 1.1; }
 .link-actions { display: flex; gap: 6px; }
-
-@media (prefers-reduced-motion: reduce) {
-  .is-online .device-dot { animation: none; }
-}
 
 @media (max-width: 860px) {
   .device-tile-actions { opacity: 1; }

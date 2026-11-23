@@ -20,6 +20,10 @@
 .auth-hero > * { animation: header-rise 0.7s var(--spring-soft) both; }
 .auth-hero > :nth-child(2) { animation-delay: 0.08s; }
 
+@keyframes shape-turn { to { rotate: 360deg; } }
+@keyframes header-rise { from { opacity: 0; transform: translateY(14px); } }
+@keyframes card-rise { from { opacity: 0; transform: translateY(18px) scale(0.985); } }
+
 .auth-hero-title {
   margin-bottom: 24px;
   font-size: clamp(2.8rem, 5vw, 4.6rem);

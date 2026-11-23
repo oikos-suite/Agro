@@ -208,14 +208,11 @@ export default function App() {
   }
 
   const currentTabItem = NAV_ITEMS.find((item) => item.id === activeTab);
-  // A sealed session this tab could not open has only a placeholder cover, so nothing is washed in.
-  const sealed = !!lastHandoff?.encryptedPayload && !lastHandoff?.opened;
-  const ambientArt = lastHandoff?.isPlaying && !sealed ? lastHandoff.artworkUrl : '';
 
   return (
     <div className={`app-shell ${lastHandoff ? 'has-player' : ''}`}>
       {/* Fixed-position, so it takes no cell in the shell's grid. */}
-      <Ambient artworkUrl={ambientArt} />
+      <Ambient />
       <Sidebar
         activeTab={activeTab}
         onTabSelect={handleTabSelect}

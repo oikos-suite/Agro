@@ -38,9 +38,6 @@
   letter-spacing: -0.02em;
 }
 
-.sidebar-brand img { transition: transform 0.45s var(--m3-spring-fast); }
-.sidebar-brand:hover img { transform: rotate(-10deg) scale(1.1); }
-
 .sidebar-nav { position: relative; gap: 4px; }
 
 .nav-item {
@@ -51,10 +48,10 @@
   border: none;
   font-size: 14.5px;
   font-weight: 600;
-  transition: color 0.25s ease, background-color 0.2s ease, transform 0.25s var(--m3-spring-fast);
+  transition: color 0.25s ease, background-color 0.2s ease;
 }
 
-.nav-item:hover { background: var(--md-sys-color-surface-container-high); transform: translateX(3px); }
+.nav-item:hover { background: var(--md-sys-color-surface-container-high); }
 
 .nav-item.active,
 .nav-item.active:hover {
@@ -65,9 +62,6 @@
   font-weight: 700;
   transform: none;
 }
-
-.nav-item svg { transition: transform 0.4s var(--m3-spring-fast); }
-.nav-item.active svg { transform: scale(1.12); }
 
 /* One tonal pill for the whole list, sprung to the active row. */
 .nav-indicator {
@@ -127,18 +121,7 @@
 .page-content {
   padding: 28px 40px calc(var(--now-bar-height) + 56px);
   gap: 18px;
-  animation: none;
 }
-
-/* Each card rises in turn, so a page assembles rather than appears. */
-.page-content > * { animation: card-rise 0.6s var(--spring-soft) both; }
-.page-content > :nth-child(2) { animation-delay: 0.05s; }
-.page-content > :nth-child(3) { animation-delay: 0.1s; }
-.page-content > :nth-child(4) { animation-delay: 0.15s; }
-.page-content > :nth-child(5) { animation-delay: 0.2s; }
-.page-content > :nth-child(n + 6) { animation-delay: 0.25s; }
-
-@keyframes card-rise { from { opacity: 0; transform: translateY(18px) scale(0.985); } }
 
 /* The two-factor suggestion sits between header and content, aligned with both. */
 .main-area > .nudge { margin: 18px 40px 0; }
@@ -148,7 +131,6 @@
 .app-shell:not(.has-player) .sidebar { margin-bottom: var(--shell-gap); }
 
 @media (prefers-reduced-motion: reduce) {
-  .page-content > * { animation: none; }
   .nav-indicator { transition: none; }
 }
 

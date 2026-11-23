@@ -131,7 +131,6 @@
   transition: transform 0.3s var(--m3-spring-fast);
 }
 
-.person-card:hover { transform: translateY(-3px); }
 .person-card.is-suspended { opacity: 0.55; }
 .person-card > :first-child { margin-bottom: 6px; }
 .person-name { font-weight: 800; font-size: 1.1rem; font-variation-settings: var(--round-title); }

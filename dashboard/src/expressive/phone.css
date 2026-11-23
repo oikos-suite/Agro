@@ -57,8 +57,7 @@
     height: 62px;
   }
 
-  .now-bar-disc, .now-bar-art, .now-bar-art-placeholder { width: 44px; height: 44px; }
-  .now-bar-art-glow { width: 36px; height: 36px; }
+  .now-bar-art, .now-bar-art-placeholder { width: 44px; height: 44px; }
 
   .page-header { margin: 0 16px; padding-top: calc(18px + env(safe-area-inset-top)); }
   .page-header .page-title { font-size: 1.6rem; }

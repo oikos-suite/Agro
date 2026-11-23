@@ -1,6 +1,5 @@
-import { EyeOff, Music2, UserPlus } from 'lucide-react';
+import { EyeOff, Music2 } from 'lucide-react';
 import Avatar from '../../Avatar.jsx';
-import Cookie from '../../expressive/Cookie.jsx';
 import { formatWhen } from './query.js';
 
 /**
@@ -10,10 +9,8 @@ import { formatWhen } from './query.js';
 export default function FriendsGrid({ friends, loaded }) {
   if (friends.length === 0) {
     return (
-      <div className="empty-state">
-        <Cookie shape="flower" size={88}><UserPlus size={34} /></Cookie>
-        <span className="empty-state-title">{loaded ? 'No friends yet' : 'Loading…'}</span>
-        {loaded && <span className="empty-state-sub">Add friends from Wanda or Wander with a friend code.</span>}
+      <div className="empty-hint">
+        {loaded ? 'No friends yet. Add them from Wanda or Wander with a friend code.' : 'Loading…'}
       </div>
     );
   }
