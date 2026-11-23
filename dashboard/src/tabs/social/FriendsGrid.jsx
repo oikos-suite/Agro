@@ -10,7 +10,7 @@ export default function FriendsGrid({ friends, loaded }) {
   if (friends.length === 0) {
     return (
       <div className="empty-hint">
-        {loaded ? 'No friends yet. Add them from Wanda or Wander with a friend code.' : 'Loading…'}
+        {loaded ? 'No friends yet. Use Add friend, or add them from Wanda or Wander.' : 'Loading…'}
       </div>
     );
   }

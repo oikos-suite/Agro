@@ -1,9 +1,12 @@
 import { useCallback, useEffect, useState } from 'react';
+import { UserPlus } from 'lucide-react';
 import { gql } from '../api.js';
 import Section from '../expressive/Section.jsx';
 import { useSectionLink } from '../expressive/useSectionLink.js';
 import { SOCIAL_DATA_QUERY } from './social/query.js';
 import FriendsGrid from './social/FriendsGrid.jsx';
+import AddFriend from './social/AddFriend.jsx';
+import FriendRequests from './social/FriendRequests.jsx';
 import ActivityFeed from './social/ActivityFeed.jsx';
 import CircleRecap from './social/CircleRecap.jsx';
 
@@ -31,6 +34,8 @@ export default function SocialTab({ onUnauthorized }) {
   const [period, setPeriod] = useState('MONTH');
 
   const [friends, setFriends] = useState([]);
+  const [requests, setRequests] = useState([]);
+  const [adding, setAdding] = useState(false);
   const [feedItems, setFeedItems] = useState([]);
   const [recap, setRecap] = useState(null);
   const [loaded, setLoaded] = useState(false);
@@ -41,6 +46,7 @@ export default function SocialTab({ onUnauthorized }) {
       const data = (await res.json())?.data;
       const rawFriends = data?.friends || [];
       setFriends(rawFriends.filter(f => f.profile?.friendState?.toLowerCase() === 'accepted'));
+      setRequests(data?.friendRequests ?? []);
       setFeedItems(data?.friendActivity ?? []);
       setRecap(data?.circleRecap ?? null);
     } catch (err) {
@@ -60,7 +66,17 @@ export default function SocialTab({ onUnauthorized }) {
 
   return (
     <>
-      <Section id="friends" title={listening ? `Friends · ${listening} listening` : 'Friends'}>
+      <Section
+        id="friends"
+        title={listening ? `Friends · ${listening} listening` : 'Friends'}
+        actions={!adding && (
+          <button type="button" className="pill-btn" onClick={() => setAdding(true)}>
+            <UserPlus size={14} /> Add friend
+          </button>
+        )}
+      >
+        {adding && <AddFriend onClose={() => setAdding(false)} onAdded={loadData} onUnauthorized={onUnauthorized} />}
+        <FriendRequests requests={requests} onChanged={loadData} onUnauthorized={onUnauthorized} />
         <FriendsGrid friends={friends} loaded={loaded} />
       </Section>
       <Section

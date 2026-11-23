@@ -4,6 +4,7 @@ export const SOCIAL_DATA_QUERY = `query SocialData($days: Int, $limit: Int, $per
     profile { username displayName bio avatarUrl friendState showNowPlaying showStats showActivity }
     nowPlaying { trackTitle artistName albumName artworkUrl isPlaying updatedAt }
   }
+  friendRequests { username displayName outgoing }
   friendActivity(days: $days, limit: $limit) { username at kind summary artist title count }
   circleRecap(period: $period) {
     period
