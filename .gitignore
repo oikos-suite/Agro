@@ -10,6 +10,10 @@ agro_data.db
 # Built into the binary by rust-embed at compile time, not source.
 dashboard/dist/
 dashboard/node_modules/
+
+# Coverage reports, written by CI for SonarCloud (`cargo llvm-cov`, `npm run test:coverage`).
+dashboard/coverage/
+/lcov.info
 backups/
 
 # Personal post-merge test checklist, not part of the repo.
