@@ -1,0 +1,109 @@
+/* Form controls for account settings, and two-factor enrolment. */
+
+/* =========================================================================
+   Form Controls for Account Settings
+   ========================================================================= */
+.form-label {
+  display: block;
+  font-size: 11px;
+  font-weight: 500;
+  color: var(--text-muted);
+  margin-bottom: 4px;
+}
+
+.form-input {
+  width: 100%;
+  padding: 8px 12px;
+  background: var(--bg-surface-elevated);
+  border: 1px solid var(--border-subtle);
+  border-radius: var(--radius-sm);
+  color: var(--text-main);
+  font-size: 13px;
+  font-family: inherit;
+}
+
+.form-input:focus {
+  outline: none;
+  border-color: var(--border-focus);
+}
+
+.badge-chip {
+  padding: 6px 12px;
+  border-radius: var(--radius-sm);
+  font-size: 12px;
+  font-weight: 600;
+}
+
+.badge-chip.success {
+  background: var(--status-active-bg);
+  border: 1px solid var(--status-active-border);
+  color: var(--status-active);
+}
+
+.icon-btn {
+  background: transparent;
+  border: none;
+  color: var(--text-muted);
+  cursor: pointer;
+  padding: 3px;
+  display: flex;
+  align-items: center;
+  border-radius: 4px;
+}
+
+.icon-btn:hover {
+  color: var(--text-primary);
+  background: var(--bg-surface-hover);
+}
+
+/* ── Two-factor enrolment ──────────────────────────────────────────────────────────────────
+   Reuses the auth card, because this screen is the same kind of thing: a full-page step that
+   has to be finished before the app is usable. */
+.enrol-qr {
+  display: flex;
+  justify-content: center;
+  background: #fff;
+  padding: 14px;
+  border-radius: var(--radius-sm, 8px);
+  margin: 14px 0 10px;
+}
+
+.enrol-secret {
+  display: block;
+  font-size: 13px;
+  letter-spacing: 0.06em;
+  word-break: break-all;
+  background: var(--bg-surface, #16161a);
+  padding: 8px 10px;
+  border-radius: 6px;
+  margin-bottom: 16px;
+}
+
+.enrol-codes {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 6px;
+  margin: 14px 0;
+}
+
+.enrol-codes code {
+  font-size: 13px;
+  background: var(--bg-surface, #16161a);
+  padding: 7px 9px;
+  border-radius: 6px;
+  text-align: center;
+}
+
+.auth-hint {
+  font-size: 12px;
+  color: var(--text-muted, #8b8b93);
+  margin: 0 0 6px;
+}
+
+.auth-sso {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  text-decoration: none;
+}

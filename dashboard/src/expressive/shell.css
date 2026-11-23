@@ -1,7 +1,7 @@
 /* ── Expressive shell ──────────────────────────────────────────────────────────────────────────
-   Loaded after index.css and overrides its shell. Material 3 Expressive as the promo site and
-   Wanda do it: solid tonal surfaces with crisp 2px outlines (no frosted glass), large rounded
-   type, a leaf-shaped sidebar and spring motion. Colour comes from the stage behind, not glows. */
+   Loaded after styles/ and overrides the shell in styles/layout.css. Material 3 Expressive as the
+   promo site and Wanda do it: solid tonal surfaces with crisp 2px outlines (no frosted glass),
+   large rounded type and a leaf-shaped sidebar. Colour comes from the stage behind, not glows. */
 
 :root {
   --shell-gap: 14px;

@@ -2,13 +2,8 @@
    Checkboxes, selects and the type of the dashboard's chrome. Monospace stays where it means
    something (passphrases, tokens, logs, timecodes) and leaves labels, names and chips. */
 
-.user-item,
 .role-chip,
 .browse-search,
-.chart-rank,
-.chart-count,
-.node-type,
-.rule-tag,
 .device-indicator-pill,
 .card select {
   font-family: inherit;

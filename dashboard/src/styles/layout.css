@@ -1,0 +1,160 @@
+/* The shell: sidebar, main area and the narrow-screen fallback. */
+
+/* ── Shell ───────────────────────────────────────────────────────────────────────────────────
+   Sidebar, scrolling content area, and a now-playing bar pinned across the bottom. The old
+   layout put navigation in a centred pill row that had started wrapping at eight tabs. */
+
+.app-shell {
+  display: grid;
+  grid-template-columns: var(--sidebar-width) 1fr;
+  grid-template-rows: 1fr var(--now-bar-height);
+  grid-template-areas: "sidebar main" "nowbar nowbar";
+  height: 100vh;
+  background: var(--bg-app);
+  color: var(--text-primary);
+  font-size: var(--text-base);
+}
+
+.sidebar {
+  grid-area: sidebar;
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-lg);
+  padding: 24px 16px;
+  background: var(--md-sys-color-surface);
+  border-right: 1px solid var(--border-subtle);
+  overflow-y: auto;
+}
+
+.sidebar-brand {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 6px 10px;
+  font-size: 20px;
+  font-weight: 800;
+  letter-spacing: -0.02em;
+  color: var(--text-h);
+}
+
+.sidebar-nav {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  flex: 1;
+}
+
+.nav-item {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  width: 100%;
+  padding: 10px 14px;
+  background: transparent;
+  border: 1px solid transparent;
+  border-radius: var(--radius-pill);
+  color: var(--md-sys-color-on-surface-variant);
+  font-size: 14px;
+  font-weight: 600;
+  text-align: left;
+  cursor: pointer;
+  transition: all 0.2s var(--m3-spring-fast);
+}
+
+.nav-item:hover {
+  background: var(--md-sys-color-surface-container-high);
+  color: var(--text-primary);
+  transform: translateX(2px);
+}
+
+.nav-item.active {
+  background: var(--md-sys-color-primary-container);
+  color: var(--md-sys-color-on-primary-container);
+  border-color: rgba(208, 188, 255, 0.2);
+  font-weight: 700;
+  box-shadow: 0 4px 14px rgba(79, 55, 139, 0.35);
+}
+
+.sidebar-footer {
+  position: relative;
+  padding-top: 12px;
+  border-top: 1px solid var(--border-subtle);
+}
+
+/* Which build this server is running, for bug reports: the crate version, plus the commit when known. */
+.user-badge-version {
+  margin-top: 6px;
+  padding: 0 14px;
+  text-align: left;
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 10.5px;
+  color: var(--text-muted);
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.role-chip {
+  padding: 2px 7px;
+  border-radius: 999px;
+  background: var(--accent-bg);
+  border: 1px solid var(--accent-border);
+  font-size: var(--text-xs);
+  letter-spacing: 0.05em;
+  text-transform: uppercase;
+  color: var(--text-secondary);
+}
+
+.btn-danger { color: var(--status-error); }
+
+/* ── Main area ─────────────────────────────────────────────────────────────────────────────── */
+
+.main-area {
+  grid-area: main;
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+  position: relative;
+  background:
+    radial-gradient(750px circle at 50% -80px, rgba(208, 188, 255, 0.07), transparent 70%),
+    var(--bg-app);
+}
+
+.page-content {
+  flex: 1;
+  overflow-y: auto;
+  padding: var(--space-lg) var(--space-xl) calc(var(--now-bar-height) + 32px);
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-md);
+}
+
+/* ── Now playing bar ───────────────────────────────────────────────────────────────────────── */
+
+.now-bar {
+  grid-area: nowbar;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--space-lg);
+  padding: 0 var(--space-xl);
+  background: var(--bg-surface);
+  border-top: 1px solid var(--border-subtle);
+}
+
+.now-bar-meta {
+  margin-top: 3px;
+  font-size: var(--text-sm);
+  color: var(--text-muted);
+}
+
+/* Narrow screens collapse the sidebar to icons rather than hiding navigation entirely. */
+@media (max-width: 860px) {
+  .app-shell { grid-template-columns: 64px 1fr; }
+  .sidebar-brand span,
+.nav-item span,
+.user-badge-version,
+.role-chip { display: none; }
+  .nav-item { justify-content: center; }
+  .page-header, .page-content, .now-bar { padding-left: var(--space-md); padding-right: var(--space-md); }
+}

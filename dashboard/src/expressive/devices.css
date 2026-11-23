@@ -27,7 +27,6 @@
 .device-dot { width: 8px; height: 8px; border-radius: 50%; background: var(--md-sys-color-outline); }
 .is-online .device-dot { background: var(--md-sys-color-tertiary); }
 
-
 .device-track {
   display: flex;
   align-items: center;
