@@ -56,4 +56,17 @@ export default defineConfig({
       commit ? `v${crateVersion} · ${commit}` : `v${crateVersion}`
     ),
   },
+  // `npm test` and `npm run test:coverage`. Coverage goes to SonarCloud as LCOV, and SonarCloud
+  // resolves paths from the repository root, so `projectRoot: '..'` writes them as
+  // `dashboard/src/...`; relative to this folder they would match no file and count as 0%.
+  test: {
+    environment: 'jsdom',
+    include: ['src/**/*.test.{js,jsx}'],
+    coverage: {
+      provider: 'v8',
+      include: ['src/**/*.{js,jsx}'],
+      exclude: ['src/**/*.test.{js,jsx}', 'src/main.jsx'],
+      reporter: ['text-summary', ['lcov', { projectRoot: '..' }]],
+    },
+  },
 })
