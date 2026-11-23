@@ -1,10 +1,12 @@
 import { useCallback, useEffect, useState } from 'react';
-import { Activity, BarChart3, Users } from 'lucide-react';
+import { UserPlus } from 'lucide-react';
 import { gql } from '../api.js';
-import SubTabs from '../expressive/SubTabs.jsx';
-import { useSubPage } from '../expressive/useSubPage.js';
+import Section from '../expressive/Section.jsx';
+import { useSectionLink } from '../expressive/useSectionLink.js';
 import { SOCIAL_DATA_QUERY } from './social/query.js';
 import FriendsGrid from './social/FriendsGrid.jsx';
+import AddFriend from './social/AddFriend.jsx';
+import FriendRequests from './social/FriendRequests.jsx';
 import ActivityFeed from './social/ActivityFeed.jsx';
 import CircleRecap from './social/CircleRecap.jsx';
 
@@ -21,13 +23,19 @@ const PERIODS = [
   { id: 'ALL', label: 'All time' }
 ];
 
-/** Friends, what they have been up to, and what the circle shares — each a page of this tab. */
+/**
+ * Friends, what they have been up to, and what the circle shares, on one page in that order: who is
+ * listening now matters most, the recap least. `#/social/activity` and `#/social/circle` scroll to
+ * their part.
+ */
 export default function SocialTab({ onUnauthorized }) {
-  const [page, openPage] = useSubPage('social', ['friends', 'activity', 'circle']);
+  useSectionLink('social');
   const [days, setDays] = useState(14);
   const [period, setPeriod] = useState('MONTH');
 
   const [friends, setFriends] = useState([]);
+  const [requests, setRequests] = useState([]);
+  const [adding, setAdding] = useState(false);
   const [feedItems, setFeedItems] = useState([]);
   const [recap, setRecap] = useState(null);
   const [loaded, setLoaded] = useState(false);
@@ -38,6 +46,7 @@ export default function SocialTab({ onUnauthorized }) {
       const data = (await res.json())?.data;
       const rawFriends = data?.friends || [];
       setFriends(rawFriends.filter(f => f.profile?.friendState?.toLowerCase() === 'accepted'));
+      setRequests(data?.friendRequests ?? []);
       setFeedItems(data?.friendActivity ?? []);
       setRecap(data?.circleRecap ?? null);
     } catch (err) {
@@ -54,30 +63,44 @@ export default function SocialTab({ onUnauthorized }) {
   }, [loadData]);
 
   const listening = friends.filter(f => f.nowPlaying?.isPlaying).length;
-  const pages = [
-    { id: 'friends', label: listening ? `Friends · ${listening} live` : 'Friends', icon: Users },
-    { id: 'activity', label: 'Activity', icon: Activity },
-    { id: 'circle', label: 'Circle', icon: BarChart3 }
-  ];
 
   return (
     <>
-      <SubTabs pages={pages} active={page} onOpen={openPage}>
-        {page === 'activity' && (
+      <Section
+        id="friends"
+        title={listening ? `Friends · ${listening} listening` : 'Friends'}
+        actions={!adding && (
+          <button type="button" className="pill-btn" onClick={() => setAdding(true)}>
+            <UserPlus size={14} /> Add friend
+          </button>
+        )}
+      >
+        {adding && <AddFriend onClose={() => setAdding(false)} onAdded={loadData} onUnauthorized={onUnauthorized} />}
+        <FriendRequests requests={requests} onChanged={loadData} onUnauthorized={onUnauthorized} />
+        <FriendsGrid friends={friends} loaded={loaded} />
+      </Section>
+      <Section
+        id="activity"
+        title="Activity"
+        actions={
           <select className="pill-select" value={days} onChange={e => setDays(Number(e.target.value))} aria-label="Window">
             {WINDOWS.map(w => <option key={w.days} value={w.days}>{w.label}</option>)}
           </select>
-        )}
-        {page === 'circle' && (
-          <select className="pill-select pill-select-primary" value={period} onChange={e => setPeriod(e.target.value)} aria-label="Period">
+        }
+      >
+        <ActivityFeed items={feedItems} loaded={loaded} />
+      </Section>
+      <Section
+        id="circle"
+        title="Circle"
+        actions={
+          <select className="pill-select" value={period} onChange={e => setPeriod(e.target.value)} aria-label="Period">
             {PERIODS.map(p => <option key={p.id} value={p.id}>{p.label}</option>)}
           </select>
-        )}
-      </SubTabs>
-
-      {page === 'friends' && <FriendsGrid friends={friends} loaded={loaded} />}
-      {page === 'activity' && <ActivityFeed items={feedItems} loaded={loaded} />}
-      {page === 'circle' && <CircleRecap recap={recap} loaded={loaded} />}
+        }
+      >
+        <CircleRecap recap={recap} loaded={loaded} />
+      </Section>
     </>
   );
 }

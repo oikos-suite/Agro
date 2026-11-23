@@ -88,9 +88,11 @@ fn erase_owned(tx: &Transaction<'_>, user_id: &str, username: &str) -> Result<()
             params![user_id],
         )?;
     }
+    // In any letter case: rows were once filed under whatever spelling a client sent, and
+    // "deleted" has to include those.
     for table in OWNED_BY_USERNAME {
         tx.execute(
-            &format!("DELETE FROM {table} WHERE user_id = ?1"),
+            &format!("DELETE FROM {table} WHERE user_id = ?1 COLLATE NOCASE"),
             params![username],
         )?;
     }

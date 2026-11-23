@@ -267,7 +267,7 @@ Enabled when the first four are set.
 
 ### Turning features off
 
-**Management → Plugins & Rules** in the dashboard lists every server feature that costs CPU, disk or bandwidth, with what each one costs, and lets an admin switch it off for the whole server: audio relay, library uploads & transfers, the privacy proxy, share links, friends' now playing, listen along, jams, acoustic search, Agro Wrapped, the popular chart, blends and cloud backups.
+**Server → Features** in the dashboard lists every server feature that costs CPU, disk or bandwidth, with what each one costs, and lets an admin switch it off for the whole server: audio relay, library uploads & transfers, the privacy proxy, share links, friends' now playing, listen along, jams, acoustic search, Agro Wrapped, the popular chart, blends and cloud backups.
 
 A feature that is off is refused: `403` with `"code": "FEATURE_DISABLED"` over HTTP, a GraphQL error with the same code. Clients read the current state from `serverFeatures`. Everything is on until switched off, and switching a feature back on loses nothing.
 

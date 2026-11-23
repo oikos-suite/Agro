@@ -115,3 +115,8 @@
 @media (max-width: 900px) {
   .profile-row, .profile-fields { grid-template-columns: minmax(0, 1fr); }
 }
+
+/* Deleting history: the year and the button share a row, and wrap onto two on a phone. */
+.retention-row { display: flex; flex-wrap: wrap; gap: 12px; align-items: center; margin-top: 6px; }
+.retention-year { flex: 0 1 200px; min-width: 0; }
+.retention-notice { padding: 10px 14px; }

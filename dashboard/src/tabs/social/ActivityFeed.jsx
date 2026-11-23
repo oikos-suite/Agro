@@ -14,10 +14,8 @@ const KINDS = {
 export default function ActivityFeed({ items, loaded }) {
   if (items.length === 0) {
     return (
-      <div className="empty-state">
-        <Cookie shape="sunny" size={88}><Activity size={34} /></Cookie>
-        <span className="empty-state-title">{loaded ? 'Quiet for now' : 'Loading…'}</span>
-        {loaded && <span className="empty-state-sub">Milestones, repeats and new favourites show up here.</span>}
+      <div className="empty-hint">
+        {loaded ? 'Quiet for now. Friends\' milestones, repeats and new favourites show up here.' : 'Loading…'}
       </div>
     );
   }

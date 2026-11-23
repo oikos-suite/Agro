@@ -1,6 +1,5 @@
 /* ── Library: overview sections and the playlist / album pages ────────────────
-   Kept out of index.css, which is already far past the size of one concept.
-   Everything here uses the tokens declared there. */
+   Everything here uses the tokens declared in styles/tokens.css. */
 
 .lib-section + .lib-section { margin-top: var(--space-xl); }
 

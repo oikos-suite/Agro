@@ -6,7 +6,8 @@ import {
   consumeSsoFragment,
   setEnrolmentRequiredHandler
 } from './api.js';
-import Sidebar, { NAV_ITEMS, ALL_TABS } from './components/Sidebar.jsx';
+import { LogOut } from 'lucide-react';
+import Sidebar, { NAV_ITEMS } from './components/Sidebar.jsx';
 import NowBar from './components/NowBar.jsx';
 import { openPresence } from './vault.js';
 import SignedOut from './SignedOut.jsx';
@@ -30,7 +31,7 @@ function getTabFromHash() {
   const first = window.location.hash.replace(/^#\/?/, '').trim().split('/')[0];
   // Tabs that moved into another one: the tab it lives in now reads the old link to open its page.
   const hash = MOVED_TABS[first] ?? first;
-  const valid = ALL_TABS.map((item) => item.id);
+  const valid = NAV_ITEMS.map((item) => item.id);
   return valid.includes(hash) ? hash : 'social';
 }
 
@@ -56,7 +57,6 @@ export default function App() {
     setEnrolmentRequiredHandler(() => setNeedsEnrolment(true));
   }, []);
   const [activeTab, setActiveTab] = useState(getTabFromHash());
-  const [unreadDrops, setUnreadDrops] = useState(0);
   const [username, setUsername] = useState('');
   const [role, setRole] = useState('');
   const isAdmin = role === 'admin';
@@ -64,7 +64,6 @@ export default function App() {
   const [nodes, setNodes] = useState([]);
   // Nothing is playing until the server says so; the now-playing bar shows its own idle text.
   const [lastHandoff, setLastHandoff] = useState(null);
-  const [syncLogs, setSyncLogs] = useState([]);
 
   // Hash-based URL routing
   useEffect(() => {
@@ -78,7 +77,6 @@ export default function App() {
   const handleTabSelect = (tabId) => {
     setActiveTab(tabId);
     window.location.hash = `#/${tabId}`;
-    if (tabId === 'social') setUnreadDrops(0);
   };
 
   // Stable, because the Library pages fetch in effects that depend on it and this component
@@ -88,43 +86,6 @@ export default function App() {
   const handleSignOut = () => {
     setToken('');
     setLocked(true);
-  };
-
-  const handleRenameNode = async (node) => {
-    const typed = window.prompt('What should this device be called?', node.petname);
-    if (typed === null) return;
-    const petname = typed.trim();
-    if (!petname) return;
-    try {
-      const res = await gql(
-        `mutation RenameNode($u: String!, $d: String!, $p: String!) {
-           renameNode(userId: $u, deviceId: $d, petname: $p)
-         }`,
-        { u: username, d: node.deviceId, p: petname }
-      );
-      const body = await res.json();
-      if (body?.errors?.length) throw new Error(body.errors[0].message);
-      setNodes((prev) => prev.map((n) => (n.deviceId === node.deviceId ? { ...n, petname } : n)));
-    } catch (e) {
-      if (e.unauthorized) setLocked(true);
-    }
-  };
-
-  const handleDeleteNode = async (deviceId) => {
-    try {
-      await gql(`
-        mutation UnregisterNode {
-          unregisterNode(userId: "${username}", deviceId: "${deviceId}")
-        }
-      `);
-      setNodes((prev) => prev.filter((n) => n.deviceId !== deviceId));
-      setSyncLogs((prev) => [
-        { time: new Date().toLocaleTimeString(), event: `[NODE] Removed device ${deviceId}` },
-        ...prev
-      ]);
-    } catch (e) {
-      if (e.unauthorized) setLocked(true);
-    }
   };
 
   const poll = useCallback(async () => {
@@ -213,28 +174,32 @@ export default function App() {
     );
   }
 
-  const currentTabItem = ALL_TABS.find((item) => item.id === activeTab);
-  // A sealed session this tab could not open has only a placeholder cover, so nothing is washed in.
-  const sealed = !!lastHandoff?.encryptedPayload && !lastHandoff?.opened;
-  const ambientArt = lastHandoff?.isPlaying && !sealed ? lastHandoff.artworkUrl : '';
+  const currentTabItem = NAV_ITEMS.find((item) => item.id === activeTab);
 
   return (
-    <div className="app-shell">
+    <div className={`app-shell ${lastHandoff ? 'has-player' : ''}`}>
       {/* Fixed-position, so it takes no cell in the shell's grid. */}
-      <Ambient artworkUrl={ambientArt} />
+      <Ambient />
       <Sidebar
         activeTab={activeTab}
         onTabSelect={handleTabSelect}
         username={username}
         isAdmin={isAdmin}
-        unreadDrops={unreadDrops}
-        onSignOut={handleSignOut}
       />
 
       <main className="main-area">
-        <PageHeader tab={currentTabItem} username={username} />
+        <PageHeader title={currentTabItem?.label ?? 'Agro'}>
+          {activeTab === 'settings' && (
+            <button type="button" className="btn btn-secondary" onClick={handleSignOut}>
+              <LogOut size={15} /> Sign out
+            </button>
+          )}
+        </PageHeader>
 
-        <SecurityNudge isAdmin={isAdmin} onOpenSettings={() => handleTabSelect('settings')} />
+        {/* Settings has the two-factor card itself, so the suggestion would only repeat it there. */}
+        {activeTab !== 'settings' && (
+          <SecurityNudge isAdmin={isAdmin} onOpenSettings={() => handleTabSelect('settings')} />
+        )}
 
         <div className="page-content" key={activeTab}>
           {activeTab === 'social' && (
@@ -242,13 +207,7 @@ export default function App() {
           )}
 
           {activeTab === 'devices' && (
-            <DevicesTab
-              username={username}
-              nodes={nodes}
-              onRenameNode={handleRenameNode}
-              onDeleteNode={handleDeleteNode}
-              onUnauthorized={lockOut}
-            />
+            <DevicesTab username={username} nodes={nodes} onChanged={poll} onUnauthorized={lockOut} />
           )}
 
           {activeTab === 'stats' && (
@@ -265,20 +224,13 @@ export default function App() {
           )}
 
           {activeTab === 'management' && isAdmin && (
-            <ManagementTab
-              me={username}
-              logs={syncLogs}
-              onUnauthorized={lockOut}
-            />
+            <ManagementTab me={username} onUnauthorized={lockOut} />
           )}
         </div>
       </main>
 
-      <NowBar
-        lastHandoff={lastHandoff}
-        nodes={nodes}
-        onUnlocked={poll}
-      />
+      {/* Nothing has played on any device yet: no bar, rather than one saying so. */}
+      {lastHandoff && <NowBar lastHandoff={lastHandoff} nodes={nodes} onUnlocked={poll} />}
     </div>
   );
 }

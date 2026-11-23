@@ -1,8 +1,7 @@
 import { useCallback, useEffect, useState } from 'react';
-import { ArchiveRestore, KeyRound, MonitorSmartphone } from 'lucide-react';
 import { gql } from '../api.js';
-import SubTabs from '../expressive/SubTabs.jsx';
-import { useSubPage } from '../expressive/useSubPage.js';
+import Section from '../expressive/Section.jsx';
+import { useSectionLink } from '../expressive/useSectionLink.js';
 import DeviceGrid from './devices/DeviceGrid.jsx';
 import SignIns from './devices/SignIns.jsx';
 import BackupsTab from './BackupsTab.jsx';
@@ -19,19 +18,22 @@ const REVOKE_MUTATION = `mutation Revoke($user: String!, $id: Int!) {
   revokeAppPassword(userId: $user, id: $id)
 }`;
 
-const PAGES = [
-  { id: 'devices', label: 'Devices', icon: MonitorSmartphone },
-  { id: 'keys', label: 'Sign-ins', icon: KeyRound },
-  { id: 'backups', label: 'Backups', icon: ArchiveRestore }
-];
+const RENAME_NODE = `mutation RenameNode($user: String!, $device: String!, $name: String!) {
+  renameNode(userId: $user, deviceId: $device, petname: $name)
+}`;
+
+const REMOVE_NODE = `mutation RemoveNode($user: String!, $device: String!) {
+  unregisterNode(userId: $user, deviceId: $device)
+}`;
 
 /**
- * Everything that belongs to the account's devices: the players themselves, the credentials they
- * sign in with, and the backups they send. Backups had a tab of their own; they come from these
- * devices, so they live here now and an old `#/backups` link opens them.
+ * Everything that belongs to the account's devices, on one page: the players themselves, the
+ * credentials they sign in with, and the backups they send. Each part is small, so they are shown
+ * one under another rather than behind tabs. `#/devices/keys`, `#/devices/backups` and the old
+ * `#/backups` scroll to their part.
  */
-export default function DevicesTab({ username, nodes = [], onRenameNode, onDeleteNode, onUnauthorized }) {
-  const [page, openPage] = useSubPage('devices', PAGES.map(p => p.id), { backups: 'backups' });
+export default function DevicesTab({ username, nodes = [], onChanged, onUnauthorized }) {
+  useSectionLink('devices', { backups: 'backups' });
   const [appPasswords, setAppPasswords] = useState([]);
   const [busy, setBusy] = useState(null);
   const [notice, setNotice] = useState('');
@@ -62,6 +64,39 @@ export default function DevicesTab({ username, nodes = [], onRenameNode, onDelet
     }
   }
 
+  /**
+   * Runs one change to a player and says if the server refused it. The list is not edited here:
+   * it is re-read, so it shows what the server actually holds rather than what was asked for.
+   */
+  async function changePlayer(query, variables, done) {
+    setNotice('');
+    try {
+      const res = await gql(query, { user: username, ...variables });
+      const body = await res.json();
+      if (body?.errors?.length) throw new Error(body.errors[0].message);
+      // Both mutations answer `false` when no such device was found.
+      if (Object.values(body?.data ?? {})[0] !== true) throw new Error('That device is no longer on this account.');
+      setNotice(done);
+      onChanged?.();
+    } catch (err) {
+      if (err.unauthorized) onUnauthorized?.();
+      else setNotice(err.message);
+    }
+  }
+
+  function renamePlayer(node) {
+    const typed = window.prompt('What should this device be called?', node.petname);
+    const name = typed?.trim();
+    if (!name || name === node.petname) return;
+    changePlayer(RENAME_NODE, { device: node.deviceId, name }, `Renamed to “${name}”.`);
+  }
+
+  function removePlayer(node) {
+    const ask = `Remove “${node.petname}” from this list?\n\nIts sign-in stays valid, so it can reconnect. Revoke it under Sign-ins to stop that.`;
+    if (!window.confirm(ask)) return;
+    changePlayer(REMOVE_NODE, { device: node.deviceId }, `Removed “${node.petname}”.`);
+  }
+
   async function revoke(device) {
     if (!window.confirm(`Revoke “${device.label}”?\n\nThat device will be signed out immediately.`)) return;
     setBusy(device.id);
@@ -82,20 +117,16 @@ export default function DevicesTab({ username, nodes = [], onRenameNode, onDelet
 
   return (
     <>
-      <SubTabs pages={PAGES} active={page} onOpen={openPage} />
-      {page === 'devices' && (
-        <DeviceGrid
-          nodes={nodes}
-          username={username}
-          onRename={node => onRenameNode?.(node)}
-          onDelete={id => onDeleteNode?.(id)}
-          onPair={pair}
-        />
-      )}
-      {page === 'keys' && (
-        <SignIns appPasswords={appPasswords} busy={busy} notice={notice} onRevoke={revoke} />
-      )}
-      {page === 'backups' && <BackupsTab onUnauthorized={onUnauthorized} />}
+      {notice && <div className="inline-notice" role="status">{notice}</div>}
+      <Section id="players" title="Players">
+        <DeviceGrid nodes={nodes} username={username} onRename={renamePlayer} onDelete={removePlayer} onPair={pair} />
+      </Section>
+      <Section id="keys" title="Sign-ins">
+        <SignIns appPasswords={appPasswords} busy={busy} onRevoke={revoke} />
+      </Section>
+      <Section id="backups" title="Backups">
+        <BackupsTab onUnauthorized={onUnauthorized} />
+      </Section>
     </>
   );
 }

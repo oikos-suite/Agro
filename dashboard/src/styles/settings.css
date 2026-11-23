@@ -1,0 +1,145 @@
+/* The settings page and the shared labelled-field component. */
+
+/* ── Settings ──────────────────────────────────────────────────────────────────────────────
+   Full width. This used to carry an inline `max-width: 840px`, which on a wide window left the
+   whole right-hand side empty while the fields themselves stayed cramped. `page-content` already
+   provides the page gutter, so there is nothing else holding it in. */
+.settings-page {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+  width: 100%;
+}
+
+.settings-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+  gap: 14px;
+  margin-top: 6px;
+}
+
+/* Spans the row it is on, so a long allowlist is not squeezed into one column. */
+.settings-grid-wide {
+  grid-column: 1 / -1;
+}
+
+.settings-switches {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 18px;
+  margin-top: 16px;
+}
+
+.switch-row {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-size: var(--text-sm);
+  color: var(--text-secondary);
+  cursor: pointer;
+}
+
+.form-hint {
+  margin: 6px 0 0;
+  font-size: var(--text-xs);
+  color: var(--text-muted);
+}
+
+/* Says why a field is absent rather than showing an empty box that reads as lost data. */
+.sealed-note {
+  display: flex;
+  gap: 10px;
+  align-items: flex-start;
+  margin-top: 12px;
+  padding: 11px 13px;
+  border: 1px solid var(--border-subtle);
+  border-radius: var(--radius-sm);
+  background: var(--bg-surface-elevated);
+  font-size: var(--text-sm);
+  color: var(--text-muted);
+  line-height: 1.5;
+}
+
+.sealed-note strong { color: var(--text-secondary); font-weight: 600; }
+
+/* ---------------------------------------------------------------------------
+   Form fields
+
+   One place for what a labelled input looks like. This replaced the per-screen
+   `.auth-input` rules, which set a 14px font and no hover, error or disabled
+   state at all.
+   --------------------------------------------------------------------------- */
+
+.field {
+  margin-bottom: 16px;
+}
+
+.field-label {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  margin-bottom: 6px;
+  font-size: var(--text-sm);
+  font-weight: 500;
+  color: var(--text-secondary);
+}
+
+.field-optional {
+  font-size: var(--text-xs);
+  font-weight: 400;
+  color: var(--text-muted);
+}
+
+.field-input {
+  width: 100%;
+  padding: 12px 16px;
+  background: var(--md-sys-color-surface-container-low);
+  border: 1.5px solid var(--border-subtle);
+  border-radius: var(--radius-sm);
+  color: var(--text-primary);
+  font-family: inherit;
+  font-size: 15px;
+  line-height: 1.4;
+  transition: all 0.2s var(--m3-spring-fast);
+}
+
+.field-input::placeholder {
+  color: var(--text-muted);
+}
+
+.field-input:hover:not(:focus):not(:disabled) {
+  border-color: var(--md-sys-color-outline);
+  background: var(--md-sys-color-surface-container);
+}
+
+.field-input:focus {
+  outline: none;
+  border-color: var(--md-sys-color-primary);
+  background: var(--md-sys-color-surface-container);
+  box-shadow: 0 0 0 3px rgba(208, 188, 255, 0.2);
+}
+
+/* Focus stays visible on an invalid field — the error colour is information, not a focus ring. */
+.field-input-invalid,
+.field-input-invalid:hover:not(:focus) {
+  border-color: var(--status-error);
+}
+
+.field-input:disabled {
+  color: var(--text-muted);
+  cursor: not-allowed;
+}
+
+.field-hint {
+  margin: 6px 0 0;
+  font-size: var(--text-xs);
+  line-height: 1.5;
+  color: var(--text-muted);
+}
+
+.field-error {
+  margin: 6px 0 0;
+  font-size: var(--text-xs);
+  line-height: 1.5;
+  color: var(--status-error);
+}

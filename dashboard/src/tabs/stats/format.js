@@ -1,5 +1,7 @@
 /** Helpers shared by the Stats tab's pieces. */
 
+export const MONTHS = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
+
 export function formatHours(seconds) {
   if (!seconds) return '0m';
   const hours = Math.floor(seconds / 3600);

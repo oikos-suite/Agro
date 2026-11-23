@@ -1,6 +1,15 @@
 import { StrictMode } from 'react'
 import { createRoot } from 'react-dom/client'
-import './index.css'
+// Base styles first, in this order: tokens.css carries the remote font @import, which has to stay
+// at the top of the bundle.
+import './styles/tokens.css'
+import './styles/components.css'
+import './styles/pages.css'
+import './styles/signin.css'
+import './styles/layout.css'
+import './styles/player.css'
+import './styles/forms.css'
+import './styles/settings.css'
 // App before the expressive layer, so that layer's styles load last and win over every
 // component stylesheet App pulls in (library.css, setup.css).
 import App from './App.jsx'
@@ -20,9 +29,6 @@ import './expressive/admin.css'
 import './expressive/library.css'
 import './expressive/auth.css'
 import './expressive/phone.css'
-import { startExpressiveCursor } from './expressive/cursor.js'
-
-startExpressiveCursor()
 
 createRoot(document.getElementById('root')).render(
   <StrictMode>

@@ -222,6 +222,7 @@ export default function AccountSettingsTab({ username, onUnauthorized }) {
     try {
       const res = await gql(PURGE_SCROBBLES, { userId: username, year: yr });
       const body = await res.json();
+      if (body?.errors?.length) throw new Error(body.errors[0].message);
       const count = body?.data?.purgeScrobbles?.purgedCount ?? 0;
       setPurgeNotice(`Successfully purged ${count} scrobbles for ${desc}.`);
     } catch (err) {

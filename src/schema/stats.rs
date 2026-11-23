@@ -112,13 +112,20 @@ impl StatsQuery {
         // Your own always; a friend's only when they have opened their statistics. This used to be
         // `authorize`, which is self-only — so `showStats` was a switch with nothing on the other
         // side of it and a friend's listening could never be read however open they set it.
-        crate::schema_social::require_visible(ctx, &user_id, crate::schema_social::Surface::Stats)?;
+        //
+        // Read under the stored name, not the argument: the gate matches names in any case, but
+        // plays are keyed on the exact username, so `Demo` used to pass here and then find nothing.
+        let subject = crate::schema_social::require_visible(
+            ctx,
+            &user_id,
+            crate::schema_social::Surface::Stats,
+        )?;
         let db = ctx.data::<Db>()?;
         let now = chrono::Utc::now().timestamp();
         let since = crate::stats::period_start(period.as_deref().unwrap_or("ALL"), now);
 
         let rows = db.scrobble_rows(
-            &user_id,
+            &subject.username,
             device_name.as_deref().filter(|d| !d.is_empty()),
             since.as_deref(),
         )?;
@@ -139,10 +146,15 @@ impl StatsQuery {
         month: Option<i32>,
         utc_offset_minutes: Option<i32>,
     ) -> async_graphql::Result<AgroWrappedPayload> {
-        crate::schema_social::require_visible(ctx, &user_id, crate::schema_social::Surface::Stats)?;
+        // The stored name, for the same reason as in `listening_stats`.
+        let subject = crate::schema_social::require_visible(
+            ctx,
+            &user_id,
+            crate::schema_social::Surface::Stats,
+        )?;
         let db = ctx.data::<Db>()?;
         crate::features::Feature::Wrapped.require(db)?;
-        let rows = db.scrobble_rows(&user_id, None, None)?;
+        let rows = db.scrobble_rows(&subject.username, None, None)?;
         let wrapped = crate::stats_wrapped::compute_wrapped(
             &rows,
             year,

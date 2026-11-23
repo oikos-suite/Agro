@@ -65,8 +65,11 @@ export default function StatsSummary({ stats, period, deviceName }) {
   );
 }
 
-/** Every device's share of the listening time as one bar, with a legend under it. */
-function DeviceSplit({ devices }) {
+/**
+ * Every device's share of the listening as one bar, with a legend under it. `format` names a
+ * device's value in its tooltip: listening time here, plays in the year in review.
+ */
+export function DeviceSplit({ devices, format = formatHours }) {
   const total = devices.reduce((sum, d) => sum + d.value, 0) || 1;
   return (
     <div className="device-split">
@@ -76,7 +79,7 @@ function DeviceSplit({ devices }) {
             key={device.name}
             className={`tone-${DEVICE_TONES[index % DEVICE_TONES.length]}`}
             style={{ flexGrow: device.value }}
-            title={`${device.name} · ${formatHours(device.value)}`}
+            title={`${device.name} · ${format(device.value)}`}
           />
         ))}
       </div>

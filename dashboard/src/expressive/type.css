@@ -26,11 +26,12 @@ textarea {
 }
 
 /* Every heading is rounded; body text keeps the family's default, sharper instance. */
-h1, h2, h3,
+h1,
+h2,
+h3,
 .card-title,
 .sidebar-brand,
 .auth-brand,
-.stat-tile-value,
 .now-bar-track-title,
 .lib-section-head h2 {
   font-variation-settings: var(--round-title);

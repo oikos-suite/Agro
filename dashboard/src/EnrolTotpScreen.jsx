@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react';
 import { QRCodeSVG } from 'qrcode.react';
-import { Shield, Check, KeyRound, Loader2 } from 'lucide-react';
+import { Shield, Check, Loader2 } from 'lucide-react';
 import { gql, setToken } from './api.js';
 import Field from './components/form/Field.jsx';
 import TextInput from './components/form/TextInput.jsx';
