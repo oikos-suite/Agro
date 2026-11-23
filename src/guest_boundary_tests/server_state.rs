@@ -115,21 +115,19 @@ pub(super) async fn a_guest_cannot_browse_the_library() {
     assert_forbidden(&r, "libraryBrowse");
 }
 
-// ── Fail-closed ─────────────────────────────────────────────────────────────────────────────
-
-/// The library index is the server's, not an account's: an entry removed from it is gone for every
-/// account and every device. The dashboard used to show the button to whoever was called "alpha";
-/// only the administrator may use it, whatever a client shows.
+/// `deleteLibraryItem` takes a `userId` but ignores it: the delete runs against the server-wide
+/// index and every device's holdings, so naming their own account must not let a guest through.
 #[tokio::test]
-pub(super) async fn a_guest_cannot_remove_anything_from_the_library_index() {
+pub(super) async fn a_guest_cannot_delete_from_the_library() {
     let h = harness();
+    let hash = "b".repeat(64);
     h.db.upsert_library_track(&crate::db_library::LibraryTrack {
-        content_hash: "hash-xtal".into(),
-        title: "Xtal".into(),
-        artist: "Aphex Twin".into(),
-        album: Some("Selected Ambient Works 85-92".into()),
+        content_hash: hash.clone(),
+        title: "Kept".into(),
+        artist: "Some Artist".into(),
+        album: None,
         album_artist: None,
-        track_no: Some(1),
+        track_no: None,
         disc_no: None,
         year: None,
         genre: None,
@@ -140,26 +138,43 @@ pub(super) async fn a_guest_cannot_remove_anything_from_the_library_index() {
         archived_path: None,
     })
     .unwrap();
-    let tracks = || -> i64 {
-        h.db.conn
-            .lock()
-            .unwrap()
-            .query_row("SELECT COUNT(*) FROM library_tracks", [], |row| row.get(0))
-            .unwrap()
-    };
-    let remove =
-        r#"mutation { deleteLibraryItem(userId: "mallory", kind: TRACK, id: "hash-xtal") }"#;
+    h.db.upsert_holding("alpha", "admin-desktop", &hash, None)
+        .unwrap();
 
-    assert_forbidden(&h.run_as(&h.guest, remove).await, "deleteLibraryItem");
+    let delete = format!(
+        r#"mutation {{ deleteLibraryItem(userId: "mallory", kind: TRACK, id: "{hash}") }}"#
+    );
+    assert_forbidden(&h.run_as(&h.guest, &delete).await, "deleteLibraryItem");
+    assert!(
+        h.db.library_track(&hash).unwrap().is_some(),
+        "the library track was deleted"
+    );
     assert_eq!(
-        tracks(),
+        h.db.device_holding_hashes("alpha", "admin-desktop")
+            .unwrap()
+            .len(),
         1,
-        "a refused removal must leave the track in the index"
+        "the admin's holding was deleted"
     );
 
+    // The same document from the admin goes through, so the refusal above is the guard and not a
+    // malformed query.
     assert_allowed(
-        &h.run_as(&h.admin, remove).await,
-        "deleteLibraryItem as admin",
+        &h.run_as(&h.admin, &delete).await,
+        "admin deleteLibraryItem",
     );
-    assert_eq!(tracks(), 0);
+    assert!(h.db.library_track(&hash).unwrap().is_none());
 }
+
+#[tokio::test]
+pub(super) async fn a_guest_cannot_reindex_the_library() {
+    let h = harness();
+    let reindex = "mutation { reindexNormalisation { done } }";
+    assert_forbidden(&h.run_as(&h.guest, reindex).await, "reindexNormalisation");
+    assert_allowed(
+        &h.run_as(&h.admin, reindex).await,
+        "admin reindexNormalisation",
+    );
+}
+
+// ── Fail-closed ─────────────────────────────────────────────────────────────────────────────
