@@ -215,7 +215,7 @@ export default function App() {
           )}
 
           {activeTab === 'library' && (
-            <LibraryTab username={username} devices={nodes} onUnauthorized={lockOut} />
+            <LibraryTab username={username} isAdmin={isAdmin} devices={nodes} onUnauthorized={lockOut} />
           )}
 
 

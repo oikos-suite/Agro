@@ -138,18 +138,26 @@ describe('pairing a device', () => {
 });
 
 describe('the library', () => {
-  it('removes an item from the index after asking', async () => {
+  const album = { id: 'album-1', title: 'Selected Ambient Works', subtitle: 'Aphex Twin', coverKey: null, trackCount: 13, presentOnDevice: true, sourceCount: 1 };
+
+  it('lets the administrator remove an item from the index, after asking', async () => {
     const server = installFakeServer({
       graphql: {
-        libraryBrowse: [{ id: 'album-1', title: 'Selected Ambient Works', subtitle: 'Aphex Twin', coverKey: null, trackCount: 13, presentOnDevice: true, sourceCount: 1 }],
+        libraryBrowse: [album],
         deleteLibraryItem: true
       }
     });
     vi.spyOn(window, 'confirm').mockReturnValue(true);
-    // The button is only drawn for the account named `alpha`; see the browser itself.
-    render(<LibraryBrowser username="alpha" devices={[]} onUnauthorized={noop} />);
+    render(<LibraryBrowser username="admin" isAdmin devices={[]} onUnauthorized={noop} />);
     fireEvent.click(await screen.findByTitle('Remove from Server'));
     await waitFor(() => expect(server.asked('deleteLibraryItem')).toBe(true));
+  });
+
+  it('offers removal only to the administrator, whatever the account is called', async () => {
+    installFakeServer({ graphql: { libraryBrowse: [album] } });
+    render(<LibraryBrowser username="alpha" devices={[]} onUnauthorized={noop} />);
+    await screen.findByText('Selected Ambient Works');
+    expect(screen.queryByTitle('Remove from Server')).toBeNull();
   });
 });
 

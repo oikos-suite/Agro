@@ -35,7 +35,7 @@ const KINDS = [
 
 const PAGE_SIZE = 120;
 
-export default function LibraryBrowser({ username, devices, onUnauthorized }) {
+export default function LibraryBrowser({ username, isAdmin = false, devices, onUnauthorized }) {
   const [kind, setKind] = useState('ALBUM');
   const [device, setDevice] = useState('');
   const [search, setSearch] = useState('');
@@ -175,7 +175,9 @@ export default function LibraryBrowser({ username, devices, onUnauthorized }) {
                 ) : !item.presentOnDevice ? (
                   <span className="cover-badge">Not here</span>
                 ) : null}
-                {username === 'alpha' && (
+                {/* The index is the server's: removing from it is the administrator's to do, and the
+                    server refuses anyone else (`deleteLibraryItem` requires an admin). */}
+                {isAdmin && (
                   <button 
                     className="cover-delete-btn" 
                     title="Remove from Server"
