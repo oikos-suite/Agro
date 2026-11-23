@@ -84,17 +84,17 @@ export default function DevicesTab({ username, nodes = [], onChanged, onUnauthor
     }
   }
 
-  function renamePlayer(node) {
+  async function renamePlayer(node) {
     const typed = window.prompt('What should this device be called?', node.petname);
     const name = typed?.trim();
     if (!name || name === node.petname) return;
-    changePlayer(RENAME_NODE, { device: node.deviceId, name }, `Renamed to “${name}”.`);
+    await changePlayer(RENAME_NODE, { device: node.deviceId, name }, `Renamed to “${name}”.`);
   }
 
-  function removePlayer(node) {
+  async function removePlayer(node) {
     const ask = `Remove “${node.petname}” from this list?\n\nIts sign-in stays valid, so it can reconnect. Revoke it under Sign-ins to stop that.`;
     if (!window.confirm(ask)) return;
-    changePlayer(REMOVE_NODE, { device: node.deviceId }, `Removed “${node.petname}”.`);
+    await changePlayer(REMOVE_NODE, { device: node.deviceId }, `Removed “${node.petname}”.`);
   }
 
   async function revoke(device) {
