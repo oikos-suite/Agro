@@ -460,31 +460,6 @@ input:checked + .slider:before {
   line-height: 1.5;
 }
 
-/* Activity Terminal */
-.terminal-card {
-  background: var(--bg-app);
-  border: 1px solid var(--border-subtle);
-  border-radius: var(--radius-sm);
-  padding: 14px 16px;
-  font-family: 'JetBrains Mono', monospace;
-  font-size: var(--text-xs);
-  color: var(--text-secondary);
-  max-height: 320px;
-  overflow-y: auto;
-  display: flex;
-  flex-direction: column;
-  gap: 6px;
-}
-
-.terminal-line {
-  display: flex;
-  gap: 8px;
-}
-
-.terminal-ts {
-  color: var(--text-muted);
-}
-
 /* Generic Buttons */
 /* Buttons: same shape, weight and spring motion as the promo site's .btn. */
 .btn {
@@ -536,53 +511,6 @@ input:checked + .slider:before {
 }
 
 /* User Switcher */
-.user-dropdown-container {
-  position: relative;
-}
-
-.user-badge-btn {
-  display: inline-flex;
-  align-items: center;
-  gap: 6px;
-  background: var(--bg-surface-elevated);
-  border: 1px solid var(--border-subtle);
-  color: var(--text-primary);
-  padding: 4px 10px;
-  border-radius: var(--radius-xs);
-  font-size: var(--text-sm);
-  font-family: 'JetBrains Mono', monospace;
-  cursor: pointer;
-  transition: all 0.15s ease;
-}
-
-.user-badge-btn:hover {
-  border-color: var(--border-strong);
-  background: var(--bg-surface-hover);
-}
-
-.user-dropdown-menu {
-  position: absolute;
-  top: calc(100% + 6px);
-  right: 0;
-  width: 200px;
-  background: var(--bg-surface-elevated);
-  border: 1px solid var(--border-strong);
-  border-radius: var(--radius-sm);
-  padding: 6px 0;
-  box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.5);
-  z-index: 100;
-  display: flex;
-  flex-direction: column;
-}
-
-.user-dropdown-title {
-  padding: 6px 12px 4px;
-  font-size: var(--text-xs);
-  text-transform: uppercase;
-  letter-spacing: 0.05em;
-  color: var(--text-muted);
-  font-weight: 600;
-}
 
 .user-item {
   display: flex;
@@ -607,12 +535,6 @@ input:checked + .slider:before {
 .user-item.active {
   color: var(--status-active);
   font-weight: 600;
-}
-
-.user-dropdown-divider {
-  height: 1px;
-  background: var(--border-subtle);
-  margin: 4px 0;
 }
 
 /* ── Links tab ─────────────────────────────────────────────────────────────
@@ -894,47 +816,10 @@ input:checked + .slider:before {
   font-family: 'JetBrains Mono', monospace;
 }
 
-.stats-columns {
-  display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
-  gap: 16px;
-}
-
 .top-list {
   display: flex;
   flex-direction: column;
   gap: 6px;
-}
-
-.top-row {
-  display: flex;
-  align-items: center;
-  gap: 8px;
-  font-size: var(--text-sm);
-  font-family: 'JetBrains Mono', monospace;
-  color: var(--text-secondary);
-  min-width: 0;
-}
-
-.top-rank {
-  width: 18px;
-  color: var(--text-muted);
-  text-align: right;
-  flex-shrink: 0;
-}
-
-.top-name {
-  flex: 1;
-  min-width: 0;
-  overflow: hidden;
-  text-overflow: ellipsis;
-  white-space: nowrap;
-  color: var(--text-primary);
-}
-
-.top-value {
-  color: var(--text-muted);
-  flex-shrink: 0;
 }
 
 /* Bars share a baseline and are scaled to the tallest in the set; see `Bars`. */
@@ -1327,36 +1212,6 @@ input:checked + .slider:before {
   border-top: 1px solid var(--border-subtle);
 }
 
-.user-badge-btn {
-  display: flex;
-  align-items: center;
-  gap: 10px;
-  width: 100%;
-  padding: 8px 14px;
-  background: var(--md-sys-color-surface-container);
-  border: 1px solid var(--border-subtle);
-  border-radius: var(--radius-pill);
-  color: var(--text-primary);
-  font-size: var(--text-sm);
-  cursor: pointer;
-  transition: all 0.2s var(--m3-spring-fast);
-}
-
-.user-badge-btn:hover { border-color: var(--border-strong); }
-.user-badge-btn.active {
-  border-color: var(--md-sys-color-primary);
-  background: var(--md-sys-color-surface-container-high);
-  box-shadow: 0 0 16px rgba(208, 188, 255, 0.15);
-}
-
-.user-badge-name {
-  flex: 1;
-  text-align: left;
-  overflow: hidden;
-  text-overflow: ellipsis;
-  white-space: nowrap;
-}
-
 /* Which build this server is running, for bug reports: the crate version, plus the commit when known. */
 .user-badge-version {
   margin-top: 6px;
@@ -1381,70 +1236,6 @@ input:checked + .slider:before {
   color: var(--text-secondary);
 }
 
-.user-dropdown-menu {
-  position: absolute;
-  /* `top` and `width` are reset explicitly: an earlier rule for this same class anchors the menu
-     below its button at a fixed 200px, which in the sidebar opened it downward off the bottom of
-     the viewport and left the panel narrower than the button it belongs to. */
-  top: auto;
-  bottom: calc(100% + 8px);
-  left: 0;
-  right: 0;
-  width: auto;
-  z-index: 40;
-  padding: 6px;
-  background: var(--bg-surface-elevated);
-  border: 1px solid var(--border-strong);
-  border-radius: var(--radius-sm);
-  box-shadow: var(--shadow);
-}
-
-.user-dropdown-action {
-  display: flex;
-  align-items: center;
-  gap: 10px;
-  width: 100%;
-  padding: 9px 12px;
-  background: transparent;
-  border: none;
-  border-radius: var(--radius-sm);
-  color: var(--text-primary);
-  font-size: var(--text-sm);
-  font-weight: 500;
-  cursor: pointer;
-  text-align: left;
-  transition: all 0.15s ease;
-  font-family: inherit;
-}
-
-.user-dropdown-action:hover {
-  background: var(--bg-surface-hover);
-  color: var(--text-h);
-}
-
-.user-dropdown-action.active {
-  background: var(--md-sys-color-primary-container);
-  color: var(--md-sys-color-on-primary-container);
-  font-weight: 600;
-}
-
-.user-dropdown-action.danger {
-  color: var(--status-error);
-}
-
-.user-dropdown-action.danger:hover {
-  background: rgba(255, 180, 171, 0.12);
-  color: var(--status-error);
-}
-
-.user-dropdown-title {
-  padding: 7px 9px;
-  font-size: var(--text-xs);
-  text-transform: uppercase;
-  letter-spacing: 0.06em;
-  color: var(--text-muted);
-}
-
 .user-item {
   display: flex;
   align-items: center;
@@ -1462,21 +1253,6 @@ input:checked + .slider:before {
 .user-item:hover { background: var(--bg-surface-hover); color: var(--text-primary); }
 .user-item.active { color: var(--text-h); }
 
-.user-dropdown-divider { height: 1px; margin: 6px 0; background: var(--border-subtle); }
-
-.user-dropdown-row { display: flex; gap: 6px; padding: 6px; }
-
-.user-dropdown-row input {
-  flex: 1;
-  min-width: 0;
-  padding: 8px 10px;
-  background: var(--bg-app);
-  border: 1px solid var(--border-strong);
-  border-radius: var(--radius-xs);
-  color: var(--text-primary);
-  font-size: var(--text-sm);
-}
-
 .btn-block { width: 100%; justify-content: center; }
 .btn-danger { color: var(--status-error); }
 
@@ -1491,19 +1267,6 @@ input:checked + .slider:before {
   background:
     radial-gradient(750px circle at 50% -80px, rgba(208, 188, 255, 0.07), transparent 70%),
     var(--bg-app);
-}
-
-.page-header {
-  padding: var(--space-xl) var(--space-xl) var(--space-md);
-  border-bottom: 1px solid var(--border-subtle);
-}
-
-.page-header h1 {
-  margin: 0;
-  font-size: var(--text-2xl);
-  font-weight: 700;
-  letter-spacing: -0.02em;
-  color: var(--text-h);
 }
 
 .page-content {
@@ -1583,10 +1346,9 @@ input:checked + .slider:before {
 @media (max-width: 860px) {
   .app-shell { grid-template-columns: 64px 1fr; }
   .sidebar-brand span,
-  .nav-item span,
-  .user-badge-name,
-  .user-badge-version,
-  .role-chip { display: none; }
+.nav-item span,
+.user-badge-version,
+.role-chip { display: none; }
   .nav-item { justify-content: center; }
   .page-header, .page-content, .now-bar { padding-left: var(--space-md); padding-right: var(--space-md); }
 }
@@ -1606,122 +1368,6 @@ input:checked + .slider:before {
 
 .pair-issue input:focus { outline: none; border-color: var(--border-focus); }
 .pair-issue .btn:disabled { opacity: 0.45; cursor: default; }
-
-/* ── Feed, recap and inbox ──────────────────────────────────────────────────────────────────
-   No new colours. Everything here is built from the existing greyscale surfaces plus
-   `--social-bg`, which was declared with the rest of the tokens and until now had no rule using
-   it. Unread is the one exception and borrows `--status-active`, on the same principle as the
-   online dot: "there is something here for you" is a status, not decoration. */
-
-.feed-list {
-  display: flex;
-  flex-direction: column;
-  gap: 2px;
-}
-
-.feed-item,
-.drop-row {
-  display: flex;
-  align-items: flex-start;
-  gap: 10px;
-  padding: 10px 12px;
-  border-radius: var(--radius-sm);
-  background: var(--social-bg);
-  color: var(--text-secondary);
-}
-
-.feed-item svg,
-.drop-row svg {
-  margin-top: 2px;
-  flex-shrink: 0;
-  color: var(--text-muted);
-}
-
-.feed-body {
-  flex: 1;
-  min-width: 0;
-}
-
-.feed-summary {
-  font-size: var(--text-sm);
-  color: var(--text-primary);
-  /* Long artist and track names are the norm, not the exception, and a feed row that wraps to
-     three lines stops being scannable. */
-  overflow: hidden;
-  text-overflow: ellipsis;
-  white-space: nowrap;
-}
-
-.feed-meta {
-  margin-top: 2px;
-  font-size: var(--text-xs);
-  color: var(--text-muted);
-}
-
-/* An unread drop is marked on its leading edge rather than by tinting the whole row: the row still
-   has to be readable, and a filled background makes the note inside it harder to read, not easier. */
-.drop-row.unread {
-  box-shadow: inset 2px 0 0 var(--status-active);
-}
-
-.drop-note {
-  margin-top: 4px;
-  font-size: var(--text-sm);
-  color: var(--text-secondary);
-  font-style: italic;
-}
-
-.drop-actions {
-  display: flex;
-  gap: 6px;
-  flex-shrink: 0;
-}
-
-.recap-anthem {
-  margin-top: 12px;
-  padding: 14px 16px;
-  border-radius: var(--radius-md);
-  background: var(--social-bg);
-  border: 1px solid var(--border-subtle);
-}
-
-.recap-label {
-  display: flex;
-  align-items: center;
-  gap: 6px;
-  font-size: var(--text-xs);
-  text-transform: uppercase;
-  letter-spacing: 0.06em;
-  color: var(--text-muted);
-}
-
-.recap-anthem-title {
-  margin-top: 6px;
-  font-size: var(--text-lg);
-  font-weight: 600;
-  color: var(--text-primary);
-}
-
-.recap-anthem-artist {
-  font-size: var(--text-sm);
-  color: var(--text-secondary);
-}
-
-/* The unread count beside the Inbox nav item. Pushed to the right so it sits at the edge of the
-   sidebar rather than immediately after a label whose width changes. */
-.nav-badge {
-  margin-left: auto;
-  min-width: 18px;
-  padding: 0 6px;
-  border-radius: 9px;
-  font-size: var(--text-xs);
-  font-weight: 600;
-  line-height: 18px;
-  text-align: center;
-  background: var(--status-active-bg);
-  border: 1px solid var(--status-active-border);
-  color: var(--status-active);
-}
 
 /* =========================================================================
    Redesigned Modern NowBar & Equalizer
@@ -2198,7 +1844,6 @@ input:checked + .slider:before {
   background: var(--bg-surface-hover);
 }
 
-
 /* ── Two-factor enrolment ──────────────────────────────────────────────────────────────────
    Reuses the auth card, because this screen is the same kind of thing: a full-page step that
    has to be finished before the app is usable. */
@@ -2330,11 +1975,6 @@ input:checked + .slider:before {
   }
 }
 
-.user-dropdown-menu {
-  transform-origin: bottom center;
-  animation: menu-rise 120ms cubic-bezier(0.2, 0, 0.2, 1);
-}
-
 /* Anything that opens downward reads better growing from its top edge. */
 .dropdown-menu,
 .context-menu,
@@ -2345,10 +1985,9 @@ input:checked + .slider:before {
 
 /* Respect a stated preference for less motion: the menu still appears, it simply does not move. */
 @media (prefers-reduced-motion: reduce) {
-  .user-dropdown-menu,
   .dropdown-menu,
-  .context-menu,
-  .popover {
+.context-menu,
+.popover {
     animation: none;
   }
 }

@@ -55,9 +55,6 @@
 
 .m3-shape > :not(.m3-shape-bg) { position: relative; color: var(--md-sys-color-on-primary-container); }
 
-.page-shape .m3-shape-bg { animation: shape-turn 24s linear infinite; }
-.page-title-row:hover .page-shape .m3-shape-bg { scale: 1.1; }
-
 @keyframes shape-turn { to { rotate: 360deg; } }
 
 /* ── Tabs & pills ────────────────────────────────────────────────────────────────────────── */
@@ -205,6 +202,5 @@
 }
 
 @media (prefers-reduced-motion: reduce) {
-  .page-shape .m3-shape-bg { animation: none; }
   .stat-tile:hover, .chart-row:hover { transform: none; }
 }

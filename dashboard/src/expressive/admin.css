@@ -138,9 +138,3 @@
 .person-chips { display: flex; gap: 4px; flex-wrap: wrap; justify-content: center; min-height: 20px; }
 .person-quota { display: inline-flex; align-items: center; gap: 6px; font-size: 12.5px; color: var(--md-sys-color-on-surface-variant); }
 .person-actions { display: flex; gap: 6px; margin-top: 8px; }
-
-/* ── Logs ────────────────────────────────────────────────────────────────────────────────── */
-
-.terminal-card { padding: 16px; border-radius: 18px; background: var(--md-sys-color-surface-container-lowest); border: 2px solid var(--md-sys-color-outline-variant); }
-.terminal-line { display: flex; gap: 12px; padding: 4px 0; font-family: 'JetBrains Mono', ui-monospace, monospace; font-size: 12.5px; }
-.terminal-ts { color: var(--md-sys-color-tertiary); }

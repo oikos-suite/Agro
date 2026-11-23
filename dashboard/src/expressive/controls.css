@@ -2,11 +2,9 @@
    Checkboxes, selects and the type of the dashboard's chrome. Monospace stays where it means
    something (passphrases, tokens, logs, timecodes) and leaves labels, names and chips. */
 
-.user-badge-btn,
 .user-item,
 .role-chip,
 .browse-search,
-.top-row,
 .chart-rank,
 .chart-count,
 .node-type,

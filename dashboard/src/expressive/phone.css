@@ -32,7 +32,7 @@
     box-shadow: 0 12px 30px -10px rgba(0, 0, 0, 0.8);
   }
 
-  .sidebar-brand, .nav-indicator, .user-badge-version, .user-badge-btn > svg { display: none; }
+  .sidebar-brand, .nav-indicator, .sidebar-footer { display: none; }
 
   .sidebar-nav { flex: 1; flex-direction: row; justify-content: space-around; gap: 2px; }
 
@@ -48,13 +48,6 @@
   .nav-item:hover { transform: none; }
   .nav-item.active, .nav-item.active:hover { background: var(--md-sys-color-primary-container); }
   .nav-item:active { border-radius: 16px; }
-  .nav-badge { position: absolute; top: 4px; right: 18%; margin: 0; }
-
-  .sidebar-footer { padding: 0; border: none; }
-  .user-badge-btn { width: 52px; height: 52px; padding: 0; justify-content: center; border-radius: 50%; }
-  .role-chip { display: none; }
-
-  .user-dropdown-menu { left: auto; right: 0; width: 210px; bottom: calc(100% + 14px); }
 
   /* The player sits on top of the navigation bar. */
   .modern-now-bar {
@@ -68,9 +61,9 @@
   .now-bar-art-glow { width: 36px; height: 36px; }
 
   .page-header { margin: 0 16px; padding-top: calc(18px + env(safe-area-inset-top)); }
-  .page-header .page-title { font-size: 2.1rem; }
-  .page-shape { width: 48px !important; height: 48px !important; }
+  .page-header .page-title { font-size: 1.6rem; }
   .page-content { padding: 20px 16px calc(var(--nav-bar-height) + 62px + 48px); }
+  .app-shell:not(.has-player) .page-content { padding-bottom: calc(var(--nav-bar-height) + 32px); }
   .main-area > .nudge { margin: 16px 16px 0; }
 
   .card { padding: 20px; border-radius: 24px; }

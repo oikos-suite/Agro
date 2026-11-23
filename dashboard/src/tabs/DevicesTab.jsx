@@ -1,8 +1,7 @@
 import { useCallback, useEffect, useState } from 'react';
-import { ArchiveRestore, KeyRound, MonitorSmartphone } from 'lucide-react';
 import { gql } from '../api.js';
-import SubTabs from '../expressive/SubTabs.jsx';
-import { useSubPage } from '../expressive/useSubPage.js';
+import Section from '../expressive/Section.jsx';
+import { useSectionLink } from '../expressive/useSectionLink.js';
 import DeviceGrid from './devices/DeviceGrid.jsx';
 import SignIns from './devices/SignIns.jsx';
 import BackupsTab from './BackupsTab.jsx';
@@ -19,19 +18,14 @@ const REVOKE_MUTATION = `mutation Revoke($user: String!, $id: Int!) {
   revokeAppPassword(userId: $user, id: $id)
 }`;
 
-const PAGES = [
-  { id: 'devices', label: 'Devices', icon: MonitorSmartphone },
-  { id: 'keys', label: 'Sign-ins', icon: KeyRound },
-  { id: 'backups', label: 'Backups', icon: ArchiveRestore }
-];
-
 /**
- * Everything that belongs to the account's devices: the players themselves, the credentials they
- * sign in with, and the backups they send. Backups had a tab of their own; they come from these
- * devices, so they live here now and an old `#/backups` link opens them.
+ * Everything that belongs to the account's devices, on one page: the players themselves, the
+ * credentials they sign in with, and the backups they send. Each part is small, so they are shown
+ * one under another rather than behind tabs. `#/devices/keys`, `#/devices/backups` and the old
+ * `#/backups` scroll to their part.
  */
 export default function DevicesTab({ username, nodes = [], onRenameNode, onDeleteNode, onUnauthorized }) {
-  const [page, openPage] = useSubPage('devices', PAGES.map(p => p.id), { backups: 'backups' });
+  useSectionLink('devices', { backups: 'backups' });
   const [appPasswords, setAppPasswords] = useState([]);
   const [busy, setBusy] = useState(null);
   const [notice, setNotice] = useState('');
@@ -82,8 +76,7 @@ export default function DevicesTab({ username, nodes = [], onRenameNode, onDelet
 
   return (
     <>
-      <SubTabs pages={PAGES} active={page} onOpen={openPage} />
-      {page === 'devices' && (
+      <Section id="players" title="Players">
         <DeviceGrid
           nodes={nodes}
           username={username}
@@ -91,11 +84,13 @@ export default function DevicesTab({ username, nodes = [], onRenameNode, onDelet
           onDelete={id => onDeleteNode?.(id)}
           onPair={pair}
         />
-      )}
-      {page === 'keys' && (
+      </Section>
+      <Section id="keys" title="Sign-ins">
         <SignIns appPasswords={appPasswords} busy={busy} notice={notice} onRevoke={revoke} />
-      )}
-      {page === 'backups' && <BackupsTab onUnauthorized={onUnauthorized} />}
+      </Section>
+      <Section id="backups" title="Backups">
+        <BackupsTab onUnauthorized={onUnauthorized} />
+      </Section>
     </>
   );
 }
