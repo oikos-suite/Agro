@@ -1,10 +1,12 @@
 import { useCallback, useEffect, useState } from 'react';
-import { User, Users } from 'lucide-react';
+import { CalendarDays, User, Users } from 'lucide-react';
 import { gql } from '../api.js';
 import StatsSummary from './stats/StatsSummary.jsx';
 import StatsCharts from './stats/StatsCharts.jsx';
 import StatsTopLists from './stats/StatsTopLists.jsx';
 import PopularTab from './PopularTab.jsx';
+import YearInReview from './stats/YearInReview.jsx';
+import { MONTHS } from './stats/format.js';
 import SubTabs from '../expressive/SubTabs.jsx';
 import { useSubPage } from '../expressive/useSubPage.js';
 
@@ -39,12 +41,24 @@ const PERIODS = [
 
 const SCOPES = [
   { id: 'me', label: 'You', icon: User },
+  { id: 'year', label: 'Year in review', icon: CalendarDays },
   { id: 'everyone', label: 'Everyone', icon: Users }
 ];
 
+const THIS_YEAR = new Date().getFullYear();
+
+const FIRST_PLAY_QUERY = `query FirstPlay($user: String!) {
+  listeningStats(userId: $user, period: "ALL") { firstPlayedAt }
+}`;
+
 export default function StatsTab({ username, nodes = [], onUnauthorized }) {
   // `#/stats/everyone`, or the old `#/popular`, opens the server-wide chart.
-  const [scope, setScope] = useSubPage('stats', ['me', 'everyone'], { popular: 'everyone' });
+  const [scope, setScope] = useSubPage('stats', ['me', 'year', 'everyone'], { popular: 'everyone' });
+  const [year, setYear] = useState(THIS_YEAR);
+  // 0 is the whole year.
+  const [month, setMonth] = useState(0);
+  // The year of the account's first play, which is as far back as the year list goes.
+  const [firstYear, setFirstYear] = useState(THIS_YEAR);
   const [period, setPeriod] = useState('MONTH');
   const [device, setDevice] = useState('');
   const [stats, setStats] = useState(null);
@@ -83,7 +97,19 @@ export default function StatsTab({ username, nodes = [], onUnauthorized }) {
     return () => clearInterval(timer);
   }, [load, scope]);
 
+  useEffect(() => {
+    if (scope !== 'year' || !username) return;
+    gql(FIRST_PLAY_QUERY, { user: username })
+      .then((res) => res.json())
+      .then((body) => {
+        const first = body?.data?.listeningStats?.firstPlayedAt;
+        if (first) setFirstYear(new Date(first * 1000).getFullYear());
+      })
+      .catch((error) => { if (error.unauthorized) onUnauthorized?.(); });
+  }, [scope, username, onUnauthorized]);
+
   const devices = Array.from(new Set([...nodes.map(n => n.petname).filter(Boolean), ...deviceOptions.map(displayName)]));
+  const years = Array.from({ length: Math.max(1, THIS_YEAR - firstYear + 1) }, (_, i) => THIS_YEAR - i);
   const shown = stats && { ...stats, byDevice: stats.byDevice.map(d => ({ ...d, name: displayName(d.name) })) };
 
   return (
@@ -100,7 +126,20 @@ export default function StatsTab({ username, nodes = [], onUnauthorized }) {
             </select>
           </div>
         )}
+        {scope === 'year' && (
+          <div className="stats-filters">
+            <select className="pill-select pill-select-primary" value={year} onChange={e => setYear(Number(e.target.value))} aria-label="Year">
+              {years.map(y => <option key={y} value={y}>{y}</option>)}
+            </select>
+            <select className="pill-select" value={month} onChange={e => setMonth(Number(e.target.value))} aria-label="Month">
+              <option value={0}>Whole year</option>
+              {MONTHS.map((name, i) => <option key={name} value={i + 1}>{name}</option>)}
+            </select>
+          </div>
+        )}
       </SubTabs>
+
+      {scope === 'year' && <YearInReview username={username} year={year} month={month} onUnauthorized={onUnauthorized} />}
 
       {scope === 'everyone' && <PopularTab />}
 
