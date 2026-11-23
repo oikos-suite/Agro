@@ -2,8 +2,13 @@
 
 [advisories]
 version = 2
-# Compile-time proc-macro pulled in transitively; no runtime code and no maintained drop-in.
-ignore = ["RUSTSEC-2024-0436"]
+ignore = [
+    # chrono is unmaintained (not a vulnerability) and has no successor release. It is used for
+    # timestamps across the whole server, so replacing it with `jiff` or `time` is a migration
+    # of its own, tracked separately. Revisit this exception when that lands, or if a
+    # vulnerability is reported against chrono.
+    { id = "RUSTSEC-2026-0543", reason = "chrono unmaintained; migration to jiff/time tracked separately" },
+]
 
 [licenses]
 version = 2
