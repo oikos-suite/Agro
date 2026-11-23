@@ -85,8 +85,9 @@ impl FeedQuery {
     /// people to open a second switch for it would mean an empty recap for everyone who had
     /// already said yes to the first.
     ///
-    /// `year` overrides `period` with a **calendar** year read in `utc_offset_minutes`, which is
-    /// what Agro Replay asks for. `period: "YEAR"` cannot serve that: it means the last 365 days,
+    /// `year` overrides `period` with a **calendar** year read in `utc_offset_minutes` (minutes
+    /// east of UTC, as for `agroWrapped`: 60 for UTC+1), which is what Agro Replay asks for.
+    /// `period: "YEAR"` cannot serve that: it means the last 365 days,
     /// so a recap of 2026 opened in February would be half about 2027.
     async fn circle_recap(
         &self,
@@ -103,8 +104,9 @@ impl FeedQuery {
         // far edge is now — which is why `until` is an `Option` rather than a very large date.
         let (period, since, until) = match year {
             Some(year) => {
-                let offset = utc_offset_minutes.unwrap_or(0);
-                let (start, end) = crate::stats_wrapped::year_bounds(year, offset)
+                let zone = crate::stats_wrapped::listener_zone(utc_offset_minutes.unwrap_or(0))
+                    .map_err(async_graphql::Error::new)?;
+                let (start, end) = crate::stats_wrapped::year_bounds(year, zone)
                     .ok_or_else(|| async_graphql::Error::new("That is not a year Agro can read"))?;
                 (
                     year.to_string(),
