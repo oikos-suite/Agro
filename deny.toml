@@ -5,9 +5,9 @@ version = 2
 ignore = [
     # chrono is unmaintained (not a vulnerability) and has no successor release. It is used for
     # timestamps across the whole server, so replacing it with `jiff` or `time` is a migration
-    # of its own, tracked separately. Revisit this exception when that lands, or if a
+    # of its own, tracked in #71. Revisit this exception when that lands, or if a
     # vulnerability is reported against chrono.
-    { id = "RUSTSEC-2026-0543", reason = "chrono unmaintained; migration to jiff/time tracked separately" },
+    { id = "RUSTSEC-2026-0543", reason = "chrono unmaintained; migration to jiff/time tracked in #71" },
 ]
 
 [licenses]
