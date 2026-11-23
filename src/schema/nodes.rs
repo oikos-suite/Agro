@@ -54,8 +54,18 @@ pub fn server_capabilities() -> Vec<String> {
         "vault.backups".to_string(),
         // `vaultKeyEnvelope`: a device paired without the passphrase can still unlock the vault.
         "vault.keyEnvelope".to_string(),
+        // Agro Replay: `agroWrapped` with `utcOffsetMinutes` and the full recap (`topHourLocal`,
+        // `byMonth`, `byHour`, `byDevice`, `firstPlay`, ...), `replayChartStanding`, and
+        // `circleRecap(year:)`. A server from before these rejects the client's whole query as
+        // invalid, which is what #43 was; without this name a client cannot tell that apart from
+        // any other failure. Servers between 22 September 2026 and this name have Replay but do not
+        // say so, so a client should read its absence as an explanation, not as a reason to skip.
+        "replay.wrapped".to_string(),
     ]
 }
+
+#[cfg(test)]
+mod capability_tests;
 
 /// How long a node stays "online" after it last reported in. Clients heartbeat inside this window
 /// while they are playing; anything longer and they show as away.
