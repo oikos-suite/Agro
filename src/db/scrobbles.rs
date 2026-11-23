@@ -127,6 +127,9 @@ impl Db {
     /// Purges scrobbles for an account, optionally restricted by year or before a given timestamp.
     ///
     /// Allows users to actively wipe listening history (e.g. at the conclusion of viewing a Rewind).
+    ///
+    /// Matches the account in any letter case. Plays used to be filed under whatever spelling the
+    /// client sent, so older rows may carry one; a purge that left them behind would not be one.
     pub fn purge_scrobbles(
         &self,
         user_id: &str,
@@ -139,17 +142,18 @@ impl Db {
                 let start = format!("{y:04}-01-01T00:00:00+00:00");
                 let end = format!("{:04}-01-01T00:00:00+00:00", y + 1);
                 conn.execute(
-                    "DELETE FROM scrobbles WHERE user_id = ?1 AND played_at >= ?2 AND played_at < ?3",
+                    "DELETE FROM scrobbles WHERE user_id = ?1 COLLATE NOCASE AND played_at >= ?2 AND played_at < ?3",
                     params![user_id, start, end],
                 )?
             }
             (None, Some(b)) => conn.execute(
-                "DELETE FROM scrobbles WHERE user_id = ?1 AND played_at < ?2",
+                "DELETE FROM scrobbles WHERE user_id = ?1 COLLATE NOCASE AND played_at < ?2",
                 params![user_id, b],
             )?,
-            (None, None) => {
-                conn.execute("DELETE FROM scrobbles WHERE user_id = ?1", params![user_id])?
-            }
+            (None, None) => conn.execute(
+                "DELETE FROM scrobbles WHERE user_id = ?1 COLLATE NOCASE",
+                params![user_id],
+            )?,
         };
         Ok(count)
     }

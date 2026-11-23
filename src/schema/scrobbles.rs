@@ -3,7 +3,7 @@
 use crate::db::Db;
 use async_graphql::{Context, InputObject, Object, SimpleObject};
 
-use super::authorize;
+use super::{authorize, caller};
 
 /// One play a client is reporting.
 #[derive(InputObject)]
@@ -75,9 +75,11 @@ impl ScrobblesMutation {
             })
             .collect();
 
+        // Filed under the stored name, not the argument: `authorize` accepts the name in any case,
+        // and plays filed under `Demo` were invisible to every read of `demo`.
+        let owner = caller(ctx)?.username();
         let db = ctx.data::<Db>()?;
-        let inserted =
-            db.record_scrobbles(&user_id, &device_name, client_type.as_deref(), &rows)?;
+        let inserted = db.record_scrobbles(owner, &device_name, client_type.as_deref(), &rows)?;
         Ok(inserted as i32)
     }
 
@@ -92,8 +94,9 @@ impl ScrobblesMutation {
         before: Option<String>,
     ) -> async_graphql::Result<PurgeScrobblesPayload> {
         authorize(ctx, &user_id)?;
+        let owner = caller(ctx)?.username();
         let db = ctx.data::<Db>()?;
-        let count = db.purge_scrobbles(&user_id, year, before.as_deref())?;
+        let count = db.purge_scrobbles(owner, year, before.as_deref())?;
         Ok(PurgeScrobblesPayload {
             purged_count: count as i32,
             success: true,

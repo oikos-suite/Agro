@@ -290,6 +290,7 @@ mod jam_membership;
 mod jam_queue;
 mod jam_skip;
 mod libraries;
+mod name_case;
 mod recaps;
 mod sealed_copies;
 mod sealed_friend_list;
