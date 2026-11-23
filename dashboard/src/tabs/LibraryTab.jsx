@@ -22,7 +22,7 @@ const go = (...parts) => {
   window.location.hash = `#/${['library', ...parts.map(encodeURIComponent)].join('/')}`;
 };
 
-export default function LibraryTab({ username, devices, onUnauthorized }) {
+export default function LibraryTab({ username, isAdmin, devices, onUnauthorized }) {
   const [route, setRoute] = useState(readRoute);
 
   useEffect(() => {
@@ -43,7 +43,7 @@ export default function LibraryTab({ username, devices, onUnauthorized }) {
     return (
       <div>
         <button type="button" className="pill-btn detail-back" onClick={back}><ArrowLeft size={14} /> Library</button>
-        <LibraryBrowser username={username} devices={devices} onUnauthorized={onUnauthorized} />
+        <LibraryBrowser username={username} isAdmin={isAdmin} devices={devices} onUnauthorized={onUnauthorized} />
       </div>
     );
   }
