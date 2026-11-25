@@ -1,7 +1,7 @@
 import { StrictMode } from 'react'
 import { createRoot } from 'react-dom/client'
-// Base styles first, in this order: tokens.css carries the remote font @import, which has to stay
-// at the top of the bundle.
+// Base styles first, in this order: tokens.css holds the design tokens and base reset the other
+// sheets build on. Fonts are self-hosted, declared in expressive/type.css.
 import './styles/tokens.css'
 import './styles/components.css'
 import './styles/pages.css'
