@@ -18,7 +18,7 @@
 }
 
 .chip-primary { background: var(--md-sys-color-primary-container); color: var(--md-sys-color-on-primary-container); }
-.chip-error { background: rgba(255, 180, 171, 0.16); color: var(--status-error); }
+.chip-error { background: color-mix(in srgb, var(--status-error) 16%, transparent); color: var(--status-error); }
 .chip-lemon { background: var(--md-sys-color-lemon); color: var(--md-sys-color-on-lemon); }
 
 /* ── Features ────────────────────────────────────────────────────────────────────────────── */

@@ -14,7 +14,7 @@
 }
 
 .card:hover {
-  border-color: rgba(208, 188, 255, 0.25);
+  border-color: color-mix(in srgb, var(--md-sys-color-primary) 25%, transparent);
 }
 
 .card-header {
@@ -147,23 +147,25 @@ input:checked + .slider:before {
   background: var(--md-sys-color-primary);
   color: var(--md-sys-color-on-primary);
 }
-.btn-primary:hover:not(:disabled) { background: #E2D4FF; }
+.btn-primary:hover:not(:disabled) { background: color-mix(in srgb, var(--md-sys-color-on-primary) 8%, var(--md-sys-color-primary)); }
 
 /* The promo site calls this one "tonal". */
 .btn-secondary {
   background: var(--md-sys-color-surface-container-highest);
   color: var(--text-primary);
 }
-.btn-secondary:hover:not(:disabled) { background: #44414F; }
+.btn-secondary:hover:not(:disabled) {
+  background: color-mix(in srgb, var(--md-sys-color-on-secondary-container) 8%, var(--md-sys-color-secondary-container));
+}
 
 .btn-danger {
-  background: rgba(255, 180, 171, 0.12);
+  background: color-mix(in srgb, var(--status-error) 12%, transparent);
   color: var(--status-error);
-  border-color: rgba(255, 180, 171, 0.3);
+  border-color: color-mix(in srgb, var(--status-error) 30%, transparent);
 }
 .btn-danger:hover:not(:disabled) {
   background: var(--status-error);
-  color: #690005;
+  color: var(--on-status-error);
 }
 
 @media (prefers-reduced-motion: reduce) {

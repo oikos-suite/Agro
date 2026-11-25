@@ -20,7 +20,7 @@
   transition: transform 0.35s var(--m3-spring-fast), border-color 0.25s ease;
 }
 
-.friend-card.is-playing { border-color: rgba(125, 220, 185, 0.45); }
+.friend-card.is-playing { border-color: color-mix(in srgb, var(--md-sys-color-tertiary) 45%, transparent); }
 
 /* What they play, as colour behind the card's top half. */
 .friend-art {
