@@ -12,7 +12,7 @@
   justify-content: center;
   gap: 24px;
   padding: 24px;
-  background: radial-gradient(circle at 50% 30%, rgba(79, 55, 139, 0.16) 0%, rgba(8, 8, 10, 1) 75%);
+  background: radial-gradient(circle at 50% 30%, color-mix(in srgb, var(--md-sys-color-primary-container) 16%, transparent) 0%, var(--md-sys-color-background) 75%);
 }
 
 .auth-card {
@@ -22,7 +22,7 @@
   border: 1.5px solid var(--border-subtle);
   border-radius: var(--radius-lg);
   padding: 40px 32px;
-  box-shadow: 0 16px 48px rgba(0, 0, 0, 0.6), 0 0 32px rgba(208, 188, 255, 0.05);
+  box-shadow: 0 16px 48px rgba(0, 0, 0, 0.6), 0 0 32px color-mix(in srgb, var(--md-sys-color-primary) 5%, transparent);
 }
 
 .auth-brand {
@@ -68,14 +68,14 @@
   font-size: var(--text-base);
   font-weight: 800;
   cursor: pointer;
-  box-shadow: 0 4px 16px rgba(208, 188, 255, 0.25);
+  box-shadow: 0 4px 16px color-mix(in srgb, var(--md-sys-color-primary) 25%, transparent);
   transition: all 0.2s var(--m3-spring-fast);
 }
 
 .auth-submit:hover:not(:disabled) {
-  background: #EADDFF;
+  background: color-mix(in srgb, var(--md-sys-color-on-primary) 8%, var(--md-sys-color-primary));
   transform: translateY(-1px);
-  box-shadow: 0 6px 22px rgba(208, 188, 255, 0.4);
+  box-shadow: 0 6px 22px color-mix(in srgb, var(--md-sys-color-primary) 40%, transparent);
 }
 
 .auth-submit:disabled { opacity: 0.5; cursor: default; }
@@ -124,7 +124,7 @@
   margin: 0 0 14px;
   padding: 9px 11px;
   border-radius: var(--radius-sm, 6px);
-  background: rgba(247, 118, 142, 0.12);
+  background: color-mix(in srgb, var(--status-error) 12%, transparent);
   color: var(--status-error, #f7768e);
   font-size: var(--text-sm);
 }

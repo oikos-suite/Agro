@@ -11,7 +11,7 @@
   transition: border-color 0.25s ease;
 }
 
-.card:hover { border-color: rgba(208, 188, 255, 0.4); }
+.card:hover { border-color: color-mix(in srgb, var(--md-sys-color-primary) 40%, transparent); }
 
 .card-title {
   font-size: 1.25rem;
@@ -150,8 +150,8 @@
   isolation: isolate;
   border-radius: var(--leaf-lg);
   background:
-    radial-gradient(120% 140% at 100% 0%, rgba(208, 188, 255, 0.2) 0%, transparent 60%),
-    radial-gradient(90% 120% at 0% 100%, rgba(125, 220, 185, 0.1) 0%, transparent 65%),
+    radial-gradient(120% 140% at 100% 0%, color-mix(in srgb, var(--md-sys-color-primary) 20%, transparent) 0%, transparent 60%),
+    radial-gradient(90% 120% at 0% 100%, color-mix(in srgb, var(--md-sys-color-tertiary) 10%, transparent) 0%, transparent 65%),
     var(--md-sys-color-surface-container);
   border: 2px solid var(--md-sys-color-primary);
 }

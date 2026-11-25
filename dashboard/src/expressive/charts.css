@@ -30,9 +30,9 @@
 .podium-1 {
   padding-top: 34px;
   background:
-    radial-gradient(120% 80% at 50% 0%, rgba(208, 188, 255, 0.18) 0%, transparent 70%),
+    radial-gradient(120% 80% at 50% 0%, color-mix(in srgb, var(--md-sys-color-primary) 18%, transparent) 0%, transparent 70%),
     var(--md-sys-color-surface-container);
-  border-color: rgba(208, 188, 255, 0.5);
+  border-color: color-mix(in srgb, var(--md-sys-color-primary) 50%, transparent);
 }
 
 .podium-art { position: relative; width: 72%; max-width: 210px; margin-bottom: 16px; }
@@ -129,8 +129,8 @@
 }
 
 .move-new { background: var(--md-sys-color-lemon); color: var(--md-sys-color-on-lemon); text-transform: uppercase; letter-spacing: 0.04em; }
-.move-up { background: rgba(125, 220, 185, 0.16); color: var(--md-sys-color-tertiary); }
-.move-down { background: rgba(255, 180, 171, 0.14); color: var(--status-error); }
+.move-up { background: color-mix(in srgb, var(--md-sys-color-tertiary) 16%, transparent); color: var(--md-sys-color-tertiary); }
+.move-down { background: color-mix(in srgb, var(--status-error) 14%, transparent); color: var(--status-error); }
 .move-same { color: var(--md-sys-color-outline); }
 
 @media (max-width: 860px) {

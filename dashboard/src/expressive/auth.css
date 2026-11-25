@@ -35,7 +35,7 @@
 }
 
 .auth-hero-title span {
-  background: linear-gradient(100deg, var(--md-sys-color-primary) 10%, #E2B6EE 55%, var(--md-sys-color-tertiary) 100%);
+  background: linear-gradient(100deg, var(--md-sys-color-primary) 10%, var(--hero-gradient-mid) 55%, var(--md-sys-color-tertiary) 100%);
   -webkit-background-clip: text;
   background-clip: text;
   color: transparent;
@@ -85,7 +85,7 @@
 
 .orbit-wave { position: absolute; inset: 0; width: 100%; height: 100%; overflow: visible; }
 .orbit-wave path { fill: none; stroke: var(--md-sys-color-outline-variant); stroke-width: 0.25; vector-effect: non-scaling-stroke; }
-.orbit-ring.inner .orbit-wave path { stroke: rgba(208, 188, 255, 0.35); stroke-width: 2; }
+.orbit-ring.inner .orbit-wave path { stroke: color-mix(in srgb, var(--md-sys-color-primary) 35%, transparent); stroke-width: 2; }
 .orbit-ring.middle .orbit-wave path, .orbit-ring.outer .orbit-wave path { stroke-width: 2; }
 
 .orbit-node {
@@ -159,7 +159,7 @@
   transition: transform 0.25s var(--m3-spring-fast), border-radius 0.3s var(--m3-spring-fast), background-color 0.15s ease;
 }
 
-.auth-submit:hover:not(:disabled) { transform: scale(1.03) translateY(-1px); background: #E2D4FF; }
+.auth-submit:hover:not(:disabled) { transform: scale(1.03) translateY(-1px); background: color-mix(in srgb, var(--md-sys-color-on-primary) 8%, var(--md-sys-color-primary)); }
 .auth-submit:active:not(:disabled) { transform: scale(0.96); border-radius: 14px; }
 
 /* ── Footer ──────────────────────────────────────────────────────────────────────────────── */

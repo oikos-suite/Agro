@@ -62,7 +62,7 @@ input[type="checkbox"]:not(.switch input, .m3-switch input):hover { border-color
 
 input[type="checkbox"]:not(.switch input, .m3-switch input):focus-visible {
   outline: none;
-  box-shadow: 0 0 0 4px rgba(208, 188, 255, 0.25);
+  box-shadow: 0 0 0 4px color-mix(in srgb, var(--md-sys-color-primary) 25%, transparent);
 }
 
 .switch-row { gap: 12px; padding: 4px 0; font-weight: 600; color: var(--md-sys-color-on-surface-variant); }
@@ -84,7 +84,7 @@ input[type="checkbox"]:not(.switch input, .m3-switch input):focus-visible {
 
 .icon-btn:hover:not(:disabled) { background: var(--md-sys-color-primary-container); color: var(--md-sys-color-on-primary-container); }
 .icon-btn:active:not(:disabled) { transform: scale(0.9); border-radius: 12px; }
-.icon-btn.danger:hover:not(:disabled) { background: rgba(255, 180, 171, 0.16); color: var(--status-error); border: none; }
+.icon-btn.danger:hover:not(:disabled) { background: color-mix(in srgb, var(--status-error) 16%, transparent); color: var(--status-error); border: none; }
 
 /* A secret shown once, and a block of config: monospace, on the lowest surface. */
 .passphrase-display,
