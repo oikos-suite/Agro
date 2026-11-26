@@ -40,7 +40,13 @@ describe('periodDays', () => {
     expect(periodDays('YEAR')).toBe(365);
   });
 
+  afterEach(() => vi.useRealTimers());
+
   it('measures ALL from the first play, and never returns less than a day', () => {
+    // Pin the clock: periodDays rounds up, so a millisecond ticking between computing
+    // tenDaysAgo and the call would otherwise make it 11.
+    vi.useFakeTimers();
+    vi.setSystemTime(new Date('2026-06-15T12:00:00Z'));
     const tenDaysAgo = Date.now() / 1000 - 10 * 86400;
     expect(periodDays('ALL', tenDaysAgo)).toBe(10);
     expect(periodDays('ALL', null)).toBe(1);
